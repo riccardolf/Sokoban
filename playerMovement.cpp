@@ -15,19 +15,19 @@ while (!done) {
       
 		else if (events.type == ALLEGRO_EVENT_TIMER) {
 			active = true;
-			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN)) {
+			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN) && y<480 - al_get_bitmap_width(player) / 4) {
 				y += movespeed;
 				dir = DOWN;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_UP)) {
+			else if (al_key_down(&keystate, ALLEGRO_KEY_UP) && y>0) {
 				y -= movespeed;
 				dir = UP;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT)) {
+			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT) && x<640 - al_get_bitmap_width(player) / 4) {
 				x += movespeed;
 				dir = RIGHT;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT)) {
+			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT) && x>0) {
 				x -= movespeed;
 				dir = LEFT;
 			}
