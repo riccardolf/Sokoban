@@ -1,4 +1,5 @@
-  ALLEGRO_KEYBOARD_STATE keystate;
+enum Direction {DOWN = 0, LEFT,UP, RIGHT};  
+ALLEGRO_KEYBOARD_STATE keystate;
 	bool done = false, draw = true, active = false;
 	float x = 10, y = 10;
 	int movespeed = 5;
