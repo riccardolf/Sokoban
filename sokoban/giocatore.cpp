@@ -5,8 +5,8 @@ Giocatore::Giocatore(int x, int y)
 	this->inizializzaAllegro();
 	x_iniziale=x;
 	y_iniziale=y;
-	player_x=x_iniziale;
-	player_y=y_iniziale;
+	player_x=x;
+	player_y=y;
 	movespeed=5;
 	player=al_load_bitmap("george.png");
 }
