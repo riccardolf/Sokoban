@@ -1,31 +1,31 @@
 #include"GestoreGioco.h"
 
-GestoreGioco::GestoreGioco(int C, int M)
+GestoreGioco::GestoreGioco(int nC, int nM)
 {
 	this->inizializzaAllegro();
-	numCasse=C;
-	numMuri=M;
+	numCasse=nC;
+	numMuri=nM;
+		
 }
 	
 
 void GestoreGioco::gioca()
 {
-	Giocatore pl(0,0); 		//  uso il costruttore di player;
+	Giocatore pl(3,5); 		//  uso il costruttore di player;
 	player=pl;
-
+	
 	for(int i=0; i<numCasse; i++)
 	{
-		Cassa c(2,8); // INSERIRE x e y iniziali delle casse
+		Cassa c(i*152,8*i); // INSERIRE x e y iniziali delle casse
 		casse.push_back(c);
 	}
+
 	for(int i=0; i<numMuri; i++)
 	{
-		Muro m(6,9); 		// inserire x e y iniziali del muro
+		Muro m(6*i*i,i*120); 		// inserire x e y iniziali del muro
 		muri.push_back(m);
 	}
-	
-//disegna il player	in posizione iniziale
-	al_draw_bitmap(player.getPlayer(), player.getX(), player.getY(), 0);
+
 
 // DISEGNA I MURI
 	for(int i=0; i<numMuri; i++)
@@ -43,7 +43,18 @@ void GestoreGioco::gioca()
 	ALLEGRO_BITMAP* giocatore = player.getPlayer();
 	bool done = false, draw = true, active = false;
 	int dir = DOWN, sourceX = 0, sourceY = 0;
-  
+   	int movespeed=6;
+
+	al_set_target_bitmap(giocatore);
+	al_set_target_bitmap(al_get_backbuffer(display));
+
+	int x=player.getX();
+	int y=player.getY();
+	
+	al_draw_bitmap(giocatore,x,y,0);
+	al_flip_display();
+	
+	al_start_timer(timer);
 	while (!done) 
 	{
 		ALLEGRO_EVENT events;
@@ -51,36 +62,26 @@ void GestoreGioco::gioca()
 		al_get_keyboard_state(&keystate);
 
 		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			break;
+			done = true;
       
-		else if (events.type == ALLEGRO_EVENT_TIMER)
-		{
+		else if (events.type == ALLEGRO_EVENT_TIMER) {
 			active = true;
-			
-			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN))
-			{
-				player.spostaGIU();
-				dir=DOWN;
+			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN) && y<480 - al_get_bitmap_width(giocatore) / 4) {
+				y += movespeed;
+				dir = DOWN;
 			}
-
-			else if (al_key_down(&keystate, ALLEGRO_KEY_UP)) 
-			{
-				player.spostaSU();				
-  			    dir=UP;
+			else if (al_key_down(&keystate, ALLEGRO_KEY_UP) && y>0) {
+				y -= movespeed;
+				dir = UP;
 			}
-
-			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT))
-			{
+			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT) && x<640 - al_get_bitmap_width(giocatore) / 4) {
 				player.spostaDX();
-				dir=RIGHT;
+				dir = RIGHT;
 			}
-		
-			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT))	  
-			{
-				player.spostaSX();
-				dir=LEFT;
+			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT) && x>0) {
+				x -= movespeed;
+				dir = LEFT;
 			}
-
 			else
 				active = false;
 
@@ -93,21 +94,24 @@ void GestoreGioco::gioca()
 				sourceY = 0;
 
 			draw = true;
+			x=player.getX();
+			if (draw) {
+				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
+		for(int i=0; i<numMuri; i++)
+			al_draw_bitmap(muri[i].getMuro(), muri[i].getX(), muri[i].getY(), 0);
 
-			if (draw)
-			{
-				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 						al_get_bitmap_height(giocatore) /4 , player.getX(), player.getY(), 0);
+		for(int i=0; i<numCasse; i++)
+			al_draw_bitmap(casse[i].getCassa(), casse[i].getX(), casse[i].getY(), 0);
+
 				al_flip_display();
 				al_clear_to_color(al_map_rgb(0, 0, 0));
 			}
 		}
-
-
 	}
 
 }
 
-const float FPS=60;
+const float FPS=30;
 void GestoreGioco::inizializzaAllegro()
 {
 	if(!al_init())
@@ -156,6 +160,7 @@ void GestoreGioco::inizializzaAllegro()
 	}
 
 	al_register_event_source(event_queue, al_get_display_event_source(display));
+	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());	
 	
 }
