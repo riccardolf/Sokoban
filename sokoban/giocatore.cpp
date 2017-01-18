@@ -21,29 +21,29 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 	player=g.player;
 }
 
-void Giocatore::spostaSU()
+int Giocatore::spostaSU()
 {
 	if(player_y>0)
-	   player_y -= movespeed;
+	   return player_y -= movespeed;
 
 }
 
-void Giocatore::spostaGIU()
+int Giocatore::spostaGIU()
 {
-	 if(player_y<480 - al_get_bitmap_width(player) / 4)
-		player_y+= movespeed;
+	 if(player_y<600 - al_get_bitmap_width(player) / 4)
+		return player_y+= movespeed;
 }
 
-void Giocatore::spostaDX()
+int Giocatore::spostaDX()
 {
-	if(player_x<640 - al_get_bitmap_width(player) / 4) 
- 	   player_x += movespeed;
+	if(player_x<800 - al_get_bitmap_width(player) / 4) 
+ 	   return player_x += movespeed;
 }
 
-void Giocatore::spostaSX()
+int Giocatore::spostaSX()
 {	
 	if(player_x>0)
-	   player_x -= movespeed;
+	   return player_x -= movespeed;
 }
 
 void Giocatore::inizializzaAllegro()

@@ -23,6 +23,8 @@ class GestoreGioco
 		vector<Cassa> casse;
 		vector<Muro> muri;
 		void inizializzaAllegro();
+		int dim;
+		int** mappa;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;

@@ -5,7 +5,10 @@ GestoreGioco::GestoreGioco(int nC, int nM)
 	this->inizializzaAllegro();
 	numCasse=nC;
 	numMuri=nM;
-		
+	dim=9;
+	mappa= new int*[dim];
+	for(int i=0; i<dim; i++)
+		mappa[i]=new int [dim];
 }
 	
 
@@ -43,7 +46,6 @@ void GestoreGioco::gioca()
 	ALLEGRO_BITMAP* giocatore = player.getPlayer();
 	bool done = false, draw = true, active = false;
 	int dir = DOWN, sourceX = 0, sourceY = 0;
-   	int movespeed=6;
 
 	al_set_target_bitmap(giocatore);
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -64,22 +66,27 @@ void GestoreGioco::gioca()
 		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			done = true;
       
-		else if (events.type == ALLEGRO_EVENT_TIMER) {
+		else if (events.type == ALLEGRO_EVENT_TIMER)
+		{
 			active = true;
-			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN) && y<480 - al_get_bitmap_width(giocatore) / 4) {
-				y += movespeed;
+			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN))
+			{
+				y=player.spostaGIU();
 				dir = DOWN;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_UP) && y>0) {
-				y -= movespeed;
+			else if (al_key_down(&keystate, ALLEGRO_KEY_UP))
+			{
+				y=player.spostaSU();
 				dir = UP;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT) && x<640 - al_get_bitmap_width(giocatore) / 4) {
-				player.spostaDX();
+			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT))
+			{
+				x=player.spostaDX();
 				dir = RIGHT;
 			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT) && x>0) {
-				x -= movespeed;
+			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT))
+			{
+				x=player.spostaSX();
 				dir = LEFT;
 			}
 			else
@@ -94,14 +101,16 @@ void GestoreGioco::gioca()
 				sourceY = 0;
 
 			draw = true;
-			x=player.getX();
-			if (draw) {
+			
+			if (draw)
+			{
 				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
-		for(int i=0; i<numMuri; i++)
-			al_draw_bitmap(muri[i].getMuro(), muri[i].getX(), muri[i].getY(), 0);
+				
+				for(int i=0; i<numMuri; i++)
+					al_draw_bitmap(muri[i].getMuro(), muri[i].getX(), muri[i].getY(), 0);
 
-		for(int i=0; i<numCasse; i++)
-			al_draw_bitmap(casse[i].getCassa(), casse[i].getX(), casse[i].getY(), 0);
+				for(int i=0; i<numCasse; i++)
+					al_draw_bitmap(casse[i].getCassa(), casse[i].getX(), casse[i].getY(), 0);
 
 				al_flip_display();
 				al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -139,7 +148,7 @@ void GestoreGioco::inizializzaAllegro()
 		cerr<<"no keyboard"<<endl;
 	}
 
-	display=al_create_display(640,480);
+	display=al_create_display(800,600);
 
 	if(!display)
 	{

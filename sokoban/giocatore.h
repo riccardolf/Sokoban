@@ -10,10 +10,10 @@ class Giocatore
 		Giocatore(int x, int y);
 		Giocatore() {}
 		Giocatore& operator=(const Giocatore &g);
-		void spostaSU();
-		void spostaGIU();
-		void spostaDX();
-		void spostaSX();
+		int spostaSU();
+		int spostaGIU();
+		int spostaDX();
+		int spostaSX();
 		int getX() const {return player_x;}
 		int getY() const {return player_y;}
 		ALLEGRO_BITMAP* getPlayer() const	{return player;}
