@@ -1,127 +1,74 @@
 #include"GestoreGioco.h"
 
-GestoreGioco::GestoreGioco(int nC, int nM)
+void GestoreGioco::Modalita()
 {
 	this->inizializzaAllegro();
-	numCasse=nC;
-	numMuri=nM;
-	dim=9;
-	mappa= new int*[dim];
-	for(int i=0; i<dim; i++)
-		mappa[i]=new int [dim];
-}
-	
+	srand(time(0);
+	int liv=0;
 
-void GestoreGioco::gioca()
+	cout<<"Scegli modalita"<<endl; 		// poi va cambiato con i bitmap
+	if(arcade)
+	{	
+		Livello1();
+		Livello2();
+		Livello3();
+	}
+	if(scegliLiv)
+	{
+		cin>>liv;
+		if(liv==1)
+			Livello1();
+		if(liv==2)
+			Livello2();
+		if(liv==3)
+			Livelo3();
+	}
+}
+
+void GestoreGioco::Livello1()
 {
 	Giocatore pl(3,5); 		//  uso il costruttore di player;
 	player=pl;
 	
-	for(int i=0; i<numCasse; i++)
-	{
-		Cassa c(i*152,8*i); // INSERIRE x e y iniziali delle casse
-		casse.push_back(c);
-	}
+	Cassa c1(152,8); // INSERIRE x e y iniziali delle casse
+	casse.push_back(c);
 
-	for(int i=0; i<numMuri; i++)
-	{
-		Muro m(6*i*i,i*120); 		// inserire x e y iniziali del muro
-		muri.push_back(m);
-	}
+	Cassa c2(152,8); // INSERIRE x e y iniziali delle casse
+	casse.push_back(c2);
 
+	Cassa c3(152,8); // INSERIRE x e y iniziali delle casse
+	casse.push_back(c3);
 
-// DISEGNA I MURI
-	for(int i=0; i<numMuri; i++)
-		al_draw_bitmap(muri[i].getMuro(), muri[i].getX(), muri[i].getY(), 0);
+	Cassa c4(152,8); // INSERIRE x e y iniziali delle casse
+	casse.push_back(c4);
 
-// disegna le casse in posizione iniziale
-	for(int i=0; i<numCasse; i++)
-		al_draw_bitmap(casse[i].getCassa(), casse[i].getX(), casse[i].getY(), 0);
+	Muro m1(6,120); 		// inserire x e y iniziali del muro
+	muri.push_back(m1);
+
+	Muro m2(6,120); 		// inserire x e y iniziali del muro
+	muri.push_back(m2);
+	Muro m3(6,120); 		// inserire x e y iniziali del muro
+	muri.push_back(m3);
+	Muro m4(6,120); 		// inserire x e y iniziali del muro
+	muri.push_back(m4);
 	
-	al_flip_display();
-	
-	enum Direction {DOWN = 0, LEFT,UP, RIGHT};  
-	ALLEGRO_KEYBOARD_STATE keystate;
-	
-	ALLEGRO_BITMAP* giocatore = player.getPlayer();
-	bool done = false, draw = true, active = false;
-	int dir = DOWN, sourceX = 0, sourceY = 0;
+	Partita p(player,casse,muri);
+	p.gioca();
+}
 
-	al_set_target_bitmap(giocatore);
-	al_set_target_bitmap(al_get_backbuffer(display));
-
-	int x=player.getX();
-	int y=player.getY();
-	
-	al_draw_bitmap(giocatore,x,y,0);
-	al_flip_display();
-	
-	al_start_timer(timer);
-	while (!done) 
-	{
-		ALLEGRO_EVENT events;
-		al_wait_for_event(event_queue, &events);
-		al_get_keyboard_state(&keystate);
-
-		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			done = true;
-      
-		else if (events.type == ALLEGRO_EVENT_TIMER)
-		{
-			active = true;
-			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN))
-			{
-				y=player.spostaGIU();
-				dir = DOWN;
-			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_UP))
-			{
-				y=player.spostaSU();
-				dir = UP;
-			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT))
-			{
-				x=player.spostaDX();
-				dir = RIGHT;
-			}
-			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT))
-			{
-				x=player.spostaSX();
-				dir = LEFT;
-			}
-			else
-				active = false;
-
-			if (active)
-				sourceY += al_get_bitmap_width(giocatore) / 4;
-			else
-				sourceY = 0;
-
-			if (sourceY >= al_get_bitmap_width(giocatore))
-				sourceY = 0;
-
-			draw = true;
-			
-			if (draw)
-			{
-				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
-				
-				for(int i=0; i<numMuri; i++)
-					al_draw_bitmap(muri[i].getMuro(), muri[i].getX(), muri[i].getY(), 0);
-
-				for(int i=0; i<numCasse; i++)
-					al_draw_bitmap(casse[i].getCassa(), casse[i].getX(), casse[i].getY(), 0);
-
-				al_flip_display();
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-			}
-		}
-	}
+void GestoreGioco::Livello2()
+{
 
 }
 
+void GestoreGioco::Livello3()
+{
+
+}
+
+
 const float FPS=30;
-void GestoreGioco::inizializzaAllegro()
+void Partita::inizializzaAllegro()
 {
 	if(!al_init())
 	{
@@ -172,4 +119,4 @@ void GestoreGioco::inizializzaAllegro()
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());	
 	
-}
+

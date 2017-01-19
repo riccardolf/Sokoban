@@ -1,30 +1,19 @@
-#ifndef GESTOREGIOCO_H
-#define GESTOREGIOCO_H
+#ifndef PARTITA_H
+#define PARTITA_H
 #include<allegro5/allegro.h>
 #include<allegro5/allegro_image.h>
 #include<allegro5/allegro_audio.h>
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
-#include"muro.h"
-#include"giocatore.h"
-#include"cassa.h"
-#include<vector>
-#include<cstdlib>
-#include<ctime>
-
-class GestoreGioco
+#include"GestoreGioco.h"
+class Partita
 {
 	public:
-		void Modalita();
-		void Livello1();
-		void Livello2();
-		void Livello3();
+		Partita(const Giocatore& g, const Cassa& c, const Muro& m);
+		void gioca();
 
-	protected:
-		int numLivelli;
+	private:
 		Giocatore player;
-		int numCasse;
-		int numMuri;
 		vector<Cassa> casse;
 		vector<Muro> muri;
 		void inizializzaAllegro();
@@ -33,6 +22,4 @@ class GestoreGioco
 		ALLEGRO_EVENT_QUEUE* event_queue;
 
 };
-
-
 #endif

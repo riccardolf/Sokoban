@@ -13,12 +13,17 @@ Giocatore::Giocatore(int x, int y)
 
 Giocatore& Giocatore::operator=(const Giocatore &g)
 {
-	x_iniziale=g.x_iniziale;
-	y_iniziale=g.y_iniziale;
-	player_x=g.player_x;
-	player_y=g.player_y;
-	movespeed=g.movespeed;
-	player=g.player;
+	if(this!=&g)
+	{
+		x_iniziale=g.x_iniziale;
+		y_iniziale=g.y_iniziale;
+		player_x=g.player_x;
+		player_y=g.player_y;
+		movespeed=g.movespeed;
+		player=g.player;
+	}
+	
+	return *this;
 }
 
 int Giocatore::spostaSU()

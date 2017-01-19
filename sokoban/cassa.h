@@ -7,7 +7,8 @@ using namespace std;
 class Cassa
 {
 	public:
-		Cassa(int x, int y);
+		Cassa(int xI, int yI, int xF, int yF);
+		Cassa& operator=(const Cassa& c);
 		void spostaSU();
 		void spostaGIU();
 		void spostaDX();

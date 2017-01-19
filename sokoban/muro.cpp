@@ -15,3 +15,15 @@ void Muro::inizializzaAllegro()
 		cerr<<"no allegro"<<endl;
 	}
 }
+
+Muro& Muro::operator=(const Muro& m)
+{
+	if(this!=&m)
+	{
+		muro_x=m.muro_x;
+		muro_y=m.muro_y;
+		muro=m.muro;
+	}
+		
+	return *this;
+}

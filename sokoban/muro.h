@@ -8,6 +8,7 @@ class Muro
 {
 	public:
 		Muro(int x, int y);		
+		Muro& operator=(const Muro& m);
 		int getX() const {return muro_x;}
 		int getY() const {return muro_y;}		
 		ALLEGRO_BITMAP* getMuro() const		{return muro;}
