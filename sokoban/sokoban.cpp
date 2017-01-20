@@ -3,14 +3,10 @@
 using namespace std;
 int main()
 {
-	int numLivelli=1;
-	int numMuri=3;
-	int numCasse=3;
 
-	GestoreGioco sokoban(numCasse, numMuri);
+	GestoreGioco sokoban;
 
-	for(int i=0; i<numLivelli; i++)
-		sokoban.gioca();
+	sokoban.Modalita();
 
 return 0;
 }

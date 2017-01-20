@@ -27,3 +27,8 @@ Muro& Muro::operator=(const Muro& m)
 		
 	return *this;
 }
+
+void Muro::destroy()
+{
+	this->al_destroy_bitmap(muro);
+}

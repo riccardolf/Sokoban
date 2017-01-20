@@ -16,6 +16,8 @@ class Cassa
 		int getX() const {return cassa_x;}
 		int getY() const {return cassa_y;}		
 		ALLEGRO_BITMAP* getCassa() const	{return cassa;}
+		void destroy();
+		bool verifica();
 
 	private:
 		int x_iniziale;

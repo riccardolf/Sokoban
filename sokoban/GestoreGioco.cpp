@@ -1,122 +1,97 @@
 #include"GestoreGioco.h"
 
+GestoreGioco::GestoreGioco()
+{
+	numLivelli=5;
+	this->creaLivelli();
+}
+
+void GestoreGioco::creaLivelli()
+{
+	// LIVELLO 1
+
+
+	Giocatore player(3,5); 		//  uso il costruttore di player;
+	int numCasse=5;
+	int numMuri=4;
+	
+	int casse_x_iniziali[numCasse]={1,2,3,4,5};
+	int casse_y_iniziali[numCasse]={1,2,3,4,5};
+	int casse_x_finali[numCasse]={6,7,8,9,0};
+	int casse_y_finali[numCasse]={6,7,8,9,0};
+
+	int muro_x[numMuri]={1,2,3,4};
+	int muro_y[numMuri]={5,6,7,8};
+	
+	for(int i=0; i<numCasse; i++)
+	{
+		Cassa c(casse_x_iniziali[i], casse_y_iniziali[i], casse_x_finali[i],casse_y_finali[i]);
+		casse.push_back(c);
+	}
+
+	for(int i=0; i<numMuri; i++)
+	{
+		Muro m(muro_x[i],muro_y[i]);
+		muri.push_back(m);
+	}	
+	
+	Livello l1(player,casse,muri);
+	livelli.push_back(l1);
+
+
+	// LIVELLO 2
+
+
+	Giocatore player1(3,5); 		//  uso il costruttore di player;
+	int numCasse=5;
+	int numMuri=4;
+	
+	int casse_x_iniziali[numCasse]={1,2,3,4,5};
+	int casse_y_iniziali[numCasse]={1,2,3,4,5};
+	int casse_x_finali[numCasse]={6,7,8,9,0};
+	int casse_y_finali[numCasse]={6,7,8,9,0};
+
+	int muro_x[numMuri]={1,2,3,4};
+	int muro_y[numMuri]={5,6,7,8};
+	
+	for(int i=0; i<numCasse; i++)
+	{
+		Cassa c(casse_x_iniziali[i], casse_y_iniziali[i], casse_x_finali[i],casse_y_finali[i]);
+		casse.push_back(c);
+	}
+
+	for(int i=0; i<numMuri; i++)
+	{
+		Muro m(muro_x[i],muro_y[i]);
+		muri.push_back(m);
+	}	
+	
+	Livello l2(player,casse,muri);
+	livelli.push_back(l2);	
+}
+
 void GestoreGioco::Modalita()
 {
-	this->inizializzaAllegro();
+
 	srand(time(0);
 	int liv=0;
 
 	cout<<"Scegli modalita"<<endl; 		// poi va cambiato con i bitmap
 	if(arcade)
 	{	
-		Livello1();
-		Livello2();
-		Livello3();
+		while(numLivelli>0)
+		{
+			liv=srand()%numLivelli;
+			livelli[liv].gioca();
+			livelli.erase(livelli.begin()+liv);
+			numLivelli--;
+		}			
+
 	}
 	if(scegliLiv)
 	{
 		cin>>liv;
-		if(liv==1)
-			Livello1();
-		if(liv==2)
-			Livello2();
-		if(liv==3)
-			Livelo3();
+		livelli[liv-1].gioca();
 	}
 }
-
-void GestoreGioco::Livello1()
-{
-	Giocatore pl(3,5); 		//  uso il costruttore di player;
-	player=pl;
-	
-	Cassa c1(152,8); // INSERIRE x e y iniziali delle casse
-	casse.push_back(c);
-
-	Cassa c2(152,8); // INSERIRE x e y iniziali delle casse
-	casse.push_back(c2);
-
-	Cassa c3(152,8); // INSERIRE x e y iniziali delle casse
-	casse.push_back(c3);
-
-	Cassa c4(152,8); // INSERIRE x e y iniziali delle casse
-	casse.push_back(c4);
-
-	Muro m1(6,120); 		// inserire x e y iniziali del muro
-	muri.push_back(m1);
-
-	Muro m2(6,120); 		// inserire x e y iniziali del muro
-	muri.push_back(m2);
-	Muro m3(6,120); 		// inserire x e y iniziali del muro
-	muri.push_back(m3);
-	Muro m4(6,120); 		// inserire x e y iniziali del muro
-	muri.push_back(m4);
-	
-	Partita p(player,casse,muri);
-	p.gioca();
-}
-
-void GestoreGioco::Livello2()
-{
-
-}
-
-void GestoreGioco::Livello3()
-{
-
-}
-
-
-const float FPS=30;
-void Partita::inizializzaAllegro()
-{
-	if(!al_init())
-	{
-		cerr<<"no allegro"<<endl;
-	}
-
-	if(!al_init_image_addon())
-	{ 
-	  cerr<<"failed initialisation image"<<endl;
-	}
-	
-	if(!al_init_primitives_addon())
-	{ 
-	  cerr<<"failed initialisation primitives"<<endl;
-	}
-
-	if(!al_init_native_dialog_addon())
-	{ 
-	  cerr<<"failed initialisation dialog"<<endl;
-	}
-
-	if(!al_install_keyboard())
-	{
-		cerr<<"no keyboard"<<endl;
-	}
-
-	display=al_create_display(800,600);
-
-	if(!display)
-	{
-		cerr<<"no display"<<endl;
-	}
-	al_set_window_title(display,"Sokoban");
-
-	timer=al_create_timer(1/FPS);
-	if(!timer)
-	{
-		cerr<<"no timer"<<endl;
-	}
-
-	event_queue=al_create_event_queue();
-	if(!event_queue)
-	{
-		cerr<<"no event_queue"<<endl;
-	}
-
-	al_register_event_source(event_queue, al_get_display_event_source(display));
-	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	al_register_event_source(event_queue, al_get_keyboard_event_source());	
-	
 

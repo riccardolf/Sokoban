@@ -17,6 +17,7 @@ class Giocatore
 		int getX() const {return player_x;}
 		int getY() const {return player_y;}
 		ALLEGRO_BITMAP* getPlayer() const	{return player;}
+		void destroy();
 
 	private:
 		int x_iniziale;

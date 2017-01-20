@@ -57,5 +57,9 @@ void Giocatore::inizializzaAllegro()
 	{
 		cerr<<"no allegro"<<endl;
 	}
+}
 
+void Giocatore::destroy()
+{
+	this->al_destroy_bitmap(player);
 }

@@ -12,6 +12,7 @@ class Muro
 		int getX() const {return muro_x;}
 		int getY() const {return muro_y;}		
 		ALLEGRO_BITMAP* getMuro() const		{return muro;}
+		void destroy();
 
 	private:
 		int muro_x;
