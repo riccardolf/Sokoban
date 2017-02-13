@@ -7,20 +7,20 @@
 #include<allegro5/allegro_primitives.h>
 #include<vector>
 #include<stack>
-#include"muro.h"
-#include"cassa.h"
-#include"giocatore.h"
+#include"mossa.h"
+#include"muro.h" 
+
 class Livello
 {
 	public:
-		Livello(const Giocatore& g, vector<Cassa> c, vector<Muro> m);
+		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
 		void gioca();
 		void destroy();
-		bool Superato();
+		bool Superato(const vector<Cassa*> casse) const;
 
 	private:
-		stack<Mossa> mosse;
-		vector<Muro> muri;
+		stack<Mossa*> mosse;
+		vector<Muro*> muri;
 		void inizializzaAllegro();
 		ALLEGRO_BITMAP* cassa;
 		ALLEGRO_BITMAP* muro;

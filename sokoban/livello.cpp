@@ -1,16 +1,15 @@
 #include"livello.h"
 
-Livello::Livello(const Giocatore& g, vector<Cassa> c, vector<Muro> m)
+Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 {
 	this->inizializzaAllegro();
 
-	mosse.push(new Mossa(g, c);		// mossa 0		come inizia il livello
+	mosse.push(new Mossa(g, c));		// mossa 0		come inizia il livello
 	muri=m;
 }
 	
 void Livello::destroy()
 {
-	player.destroy();
 	al_destroy_bitmap(cassa);
 	al_destroy_bitmap(muro);
 	al_destroy_timer(timer);
@@ -22,14 +21,13 @@ void Livello::gioca()
 {
 // DISEGNA I MURI
 	for(int i=0; i<muri.size(); i++)
-		al_draw_bitmap(muro, muri[i].getX(), muri[i].getY(), 0);
+		al_draw_bitmap(muro, muri[i]->getX(), muri[i]->getY(), 0);
 
-	vector<Cassa> casse;
-	casse=mosse.top().getCasse();
+	vector<Cassa*> casse=mosse.top()->getCasse();
 
 // disegna le casse in posizione iniziale
 	for(int i=0; i<casse.size(); i++)
-		al_draw_bitmap(cassa, casse[i].getX(), casse[i].getY(), 0);
+		al_draw_bitmap(cassa, casse[i]->getX(), casse[i]->getY(), 0);
 		
 	al_flip_display();
 	
@@ -37,13 +35,13 @@ void Livello::gioca()
 	ALLEGRO_KEYBOARD_STATE keystate;
 	
 	ALLEGRO_BITMAP* giocatore = al_load_bitmap("george.png");
-	bool active = false;
+	bool active = false, draw=false;
 	int dir = DOWN, sourceX = 0, sourceY = 0, movespeed=7;
 
 	al_set_target_bitmap(giocatore);
 	al_set_target_bitmap(al_get_backbuffer(display));
 
-	Giocatore player=mosse.top().getPlayer();
+	Giocatore player=mosse.top()->getPlayer();
 	int x=player.getX();
 	int y=player.getY();
 	
@@ -66,7 +64,7 @@ void Livello::gioca()
 			if (al_key_down(&keystate, ALLEGRO_KEY_DOWN))
 			{
 				for(int i=0; i<muri.size(); i++)
-					if(y+movespeed < muri[i].getY()-64)
+					if(y+movespeed < muri[i]->getY()-64)
 					{
 						y=player.spostaGIU(movespeed);
 						player.setY(y);						
@@ -79,7 +77,7 @@ void Livello::gioca()
 			{
 				for(int i=0; i<muri.size(); i++)
 				{
-					if(y-movespeed > muri[i].getY()+64)
+					if(y-movespeed > muri[i]->getY()+64)
 					{
 						y=player.spostaSU(movespeed);
 						player.setY(y);
@@ -91,7 +89,7 @@ void Livello::gioca()
 			else if (al_key_down(&keystate, ALLEGRO_KEY_RIGHT))
 			{
 				for(int i=0; i<muri.size(); i++)
-					if(x+movespeed < muri[i].getX()-64)
+					if(x+movespeed < muri[i]->getX()-64)
 					{
 						x=player.spostaDX(movespeed);
 						player.setX(x);
@@ -102,7 +100,7 @@ void Livello::gioca()
 			else if (al_key_down(&keystate, ALLEGRO_KEY_LEFT))
 			{
 				for(int i=0; i<muri.size(); i++)
-					if(x-movespeed > muri[i].getX()+64)
+					if(x-movespeed > muri[i]->getX()+64)
 					{
 						x=player.spostaSX(movespeed);
 						player.setX(x);
@@ -116,37 +114,78 @@ void Livello::gioca()
 
 			if (active)
 				sourceY += al_get_bitmap_width(giocatore) / 4;
-			else if(!active || sourceY >= al_get_bitmap_width(giocatore))
+			else
 				sourceY = 0;
-			
-			mosse.push(new Mossa(player, casse));
 
-			for(int i=0; i<muri.size(); i++)
-				al_draw_bitmap(muro, muri[i].getX(), muri[i].getY(), 0);
+			if(sourceY >= al_get_bitmap_width(giocatore))
+				sourceY = 0;
 
-			for(int i=0; i<casse.size(); i++)
+			draw=true;
+			if(draw)
 			{
-				al_draw_bitmap(cassa, casse[i].getX(), casse[i].getY(), 0);
-				al_draw_filled_circle(casse[i].getEndX(),casse[i].getEndY(), 7, al_map_rgb(255,0,0));
+				for(int i=0; i<muri.size(); i++)
+					al_draw_bitmap(muro, muri[i]->getX(), muri[i]->getY(), 0);
+
+				for(int i=0; i<casse.size(); i++)
+				{
+					al_draw_bitmap(cassa, casse[i]->getX(), casse[i]->getY(), 0);
+					al_draw_filled_circle(casse[i]->getEndX(),casse[i]->getEndY(), 7, al_map_rgb(255,0,0));
+				}
+		
+				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
+		
+				al_flip_display();
+				al_clear_to_color(al_map_rgb(0,0,0));
 			}
-		
-			al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
-		
-			al_flip_display();
-			al_clear_to_color(al_map_rgb(0,0,0));
 		}
 		
-	
-		if(Superato())
-			break;
+		mosse.push(new Mossa(player, casse));
 
+/*		if(ricomincia Livello)
+		{
+			clear(mosse);
+			casse=mosse.top()->getCasse();			
+			player=mosse.top()->getPlayer();
+		    x=player.getX();
+			y=player.getY();	
+		}
+		
+		if(torna ad una mossa precedente)
+		{
+			mosse.pop();
+			casse=mosse.top()->getCasse();
+			player=mosse.top()->getPlayer();
+		    x=player.getX();
+			y=player.getY();	
+		}
+
+		if(Superato(casse))
+		{
+			al_destroy_bitmap(giocatore);
+			destroy();
+			break;
+		}*/
 	}
 
 }
-bool Livello::Superato()
+
+bool clear(stack<Mossa*> mosse)
+{
+	if(mosse.size()<2)
+		return false;
+	
+	while(mosse.size()>1)
+	{
+		mosse.pop();
+	}
+
+	return true;
+
+}
+bool Livello::Superato(vector<Cassa*> casse)	const
 {
 	for(int i=0; i<casse.size(); i++)
-		if(!casse[i].verifica())
+		if(!casse[i]->verifica())
 			return false;
 	
 	return true;
@@ -179,7 +218,12 @@ void Livello::inizializzaAllegro()
 	{
 		cerr<<"no keyboard"<<endl;
 	}
-
+	
+	if(!al_install_mouse())
+	{
+		cerr<<"no mouse"<<endl;
+	}		
+	
 	display=al_create_display(800,600);
 
 	if(!display)
@@ -204,7 +248,8 @@ void Livello::inizializzaAllegro()
 	muro=al_load_bitmap("wall.png");
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	al_register_event_source(event_queue, al_get_keyboard_event_source());	
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	al_register_event_source(event_queue, al_get_mouse_event_source());		
 }
 
 

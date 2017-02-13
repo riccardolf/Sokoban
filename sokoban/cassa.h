@@ -7,6 +7,7 @@ class Cassa
 {
 	public:
 		Cassa(int xI, int yI, int xF, int yF);
+		Cassa(const Cassa& c);
 		Cassa& operator=(const Cassa& c);
 		void spostaSU();
 		void spostaGIU();
@@ -19,8 +20,6 @@ class Cassa
 		bool verifica();
 
 	private:
-		int x_iniziale;
-		int y_iniziale;
 		int x_finale;
 		int y_finale;
 		int cassa_x;

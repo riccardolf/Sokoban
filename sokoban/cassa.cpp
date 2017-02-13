@@ -2,20 +2,24 @@
 
 Cassa::Cassa(int xI, int yI, int xF, int yF)
 {
-	x_iniziale=xI;
-	y_iniziale=yI;
-	cassa_x=x_iniziale;
-	cassa_y=y_iniziale;
+	cassa_x=xI;
+	cassa_y=yI;
 	x_finale=xF;
 	y_finale=yF;
+}
+
+Cassa::Cassa(const Cassa& c)
+{
+	x_finale=c.x_finale;
+	y_finale=c.y_finale;
+	cassa_x=c.cassa_x;
+	cassa_y=c.cassa_y;
 }
 
 Cassa& Cassa::operator=(const Cassa& c)
 {
 	if(this!=&c)
 	{
-		x_iniziale=c.x_iniziale;
-		y_iniziale=c.y_iniziale;
 		x_finale=c.x_finale;
 		y_finale=c.y_finale;
 		cassa_x=c.cassa_x;

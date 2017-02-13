@@ -13,40 +13,55 @@ GestoreGioco::GestoreGioco()
 	posMuriY = new int*[numLivelli];
 	posGiocatoreX = new int[numLivelli];
 	posGiocatoreY = new int[numLivelli];
-	
+
 // livello 1
 	numCasse[0]=2;
 	numMuri[0]=23;
-	posCasseXi[0] = new int [numCasse[0]];
-	posCasseXf[0] = new int [numCasse[0]];
-	posCasseYi[0] = new int [numCasse[0]];
-	posCasseYf[0] = new int [numCasse[0]];
-	posCasseXi[0] = {148,212};
-	posCasseXf[0] = {228,228};
-	posCasseYi[0] = {308,244};
-	posCasseYf[0] = {324,324};
+
+	int CasseXi[numCasse[0]] = {148,212};
+	posCasseXi[0] =	CasseXi;	
+	int CasseXf[numCasse[0]] = {228,228};
+	posCasseXf[0] = CasseXf;
+	int CasseYi[numCasse[0]] = {308,244};	
+	posCasseYi[0] = CasseYi;
+	int CasseYf[numCasse[0]] = {324,324};
+	posCasseYf[0] = CasseYf;
+
 	posGiocatoreX[0] = 84;
 	posGiocatoreY[0] = 164;
-	posMuriX[0] = new int[numMuri[0]];
-	posMuriY[0] = new int[numMuri[0]];
-	posMuriX[0] = { 20, 20, 20, 20, 20, 20, 84,148,212,276,340,404,404,404,404,404,340,340,276,212,148, 84,148};
-	posMuriY[0] = {100,164,228,292,356,420,420,420,420,420,420,420,356,292,228,164,164,100,100,100,100,100,292};
+
+	int MuriX[numMuri[0]] = { 20, 20, 20, 20, 20, 20, 84,148,212,276,340,404,404,404,404,404,340,340,276,212,148, 84,148};
+	posMuriX[0] = MuriX;
+	int MuriY[numMuri[0]] = {100,164,228,292,356,420,420,420,420,420,420,420,356,292,228,164,164,100,100,100,100,100,292};
+	posMuriY[0] = MuriY;
 
 // livello 2
 
+Modalita();
+}
+GestoreGioco::~GestoreGioco()
+{
+	delete[]posGiocatoreX;
+	delete[]posGiocatoreY;
+	delete[]posMuriX;
+	delete[]posMuriY;
+	delete[]posCasseXi;
+	delete[]posCasseXf;
+	delete[]posCasseYi;
+	delete[]posCasseYf;
+	delete[]numMuri;
+	delete[]numCasse;
 }
 
 void GestoreGioco::creaLivello(int liv)
 {
-
 	Giocatore player(posGiocatoreX[liv],posGiocatoreY[liv]); 		//  uso il costruttore di player;
 
 	for(int i=0; i<numCasse[liv]; i++)
-		casse.push_back(new Cassa(posCasseXi[i], posCasseYi[i], posCasseXf[i], posCasseYf[i]));
+		casse.push_back(new Cassa(posCasseXi[liv][i], posCasseYi[liv][i], posCasseXf[liv][i], posCasseYf[liv][i]));
 
 	for(int i=0; i<numMuri[liv]; i++)
-		muri.push_back(new Muro(PosMuriX[i],posMuroY[i]));
-
+		muri.push_back(new Muro(posMuriX[liv][i],posMuriY[liv][i]));
 
 	Livello l(player, casse, muri);
 	l.gioca();
@@ -56,11 +71,9 @@ void GestoreGioco::creaLivello(int liv)
 
 	for(int i=0; i<numCasse[liv]; i++)
 		delete casse[i];
-	
-
 }	
 
-void rimuovi(Vector<int>& livelli, int pos, int& dim)
+void GestoreGioco::rimuovi(vector<int> livelli, int pos, int& dim)
 {
 	for(int i=pos; i<dim; i++)
 		livelli[i]=livelli[i+1];
@@ -70,7 +83,6 @@ void rimuovi(Vector<int>& livelli, int pos, int& dim)
 
 void GestoreGioco::Modalita()
 {
-
 	srand(time(0));
 	int liv=0;
 
@@ -83,7 +95,8 @@ void GestoreGioco::Modalita()
 		for(int i=0; i<num; i++)
 			livelli.push_back(i+1);
 
-		while(num>0)
+		creaLivello(0);
+	/*	while(num>0)
 		{
 			liv=rand()%num;
 			creaLivello(liv);

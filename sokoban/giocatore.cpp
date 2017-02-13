@@ -14,7 +14,6 @@ Giocatore::Giocatore(const Giocatore& g)
 	y_iniziale=g.y_iniziale;
 	player_x=g.player_x;
 	player_y=g.player_y;
-	player=g.player;
 
 }
 
@@ -26,7 +25,6 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 		y_iniziale=g.y_iniziale;
 		player_x=g.player_x;
 		player_y=g.player_y;
-		player=g.player;
 	}
 	
 	return *this;

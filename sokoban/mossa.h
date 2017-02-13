@@ -1,17 +1,18 @@
 #ifndef MOSSA_H
 #define MOSSA_H
-#include "GestoreGioco.h"
+#include"cassa.h"
+#include"giocatore.h"
 
 class Mossa
 {
 	public:
-		Mossa(const Giocatore& g, vector<Cassa> c)	{player=g; casse=c;}
-		Giocatore getGiocatore() const	{return player;}
-		vector<Cassa> getCasse() const	{return casse;}
+		Mossa(const Giocatore& g, vector<Cassa*> c)	{player=g; casse=c;}
+		Giocatore getPlayer() const	{return player;}
+		vector<Cassa*> getCasse() const	{return casse;}
 
 	private:
 		Giocatore player;
-		vector<Cassa> casse;
+		vector<Cassa*> casse;
 		
 };
 #endif
