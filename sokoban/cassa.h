@@ -1,6 +1,5 @@
 #ifndef CASSA_H
 #define CASSA_H
-#include<allegro5/allegro.h>
 #include<iostream>
 using namespace std;
 
@@ -14,9 +13,9 @@ class Cassa
 		void spostaDX();
 		void spostaSX();
 		int getX() const {return cassa_x;}
-		int getY() const {return cassa_y;}		
-		ALLEGRO_BITMAP* getCassa() const	{return cassa;}
-		void destroy();
+		int getY() const {return cassa_y;}
+		int getEndX() const {return x_finale;}
+		int getEndY() const	{return y_finale;}		
 		bool verifica();
 
 	private:
@@ -26,9 +25,6 @@ class Cassa
 		int y_finale;
 		int cassa_x;
 		int cassa_y;
-		ALLEGRO_BITMAP* cassa;
-		void inizializzaAllegro();
-
 };
 
 #endif

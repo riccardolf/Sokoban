@@ -14,14 +14,23 @@ class GestoreGioco
 	public:
 		GestoreGioco();
 		void Modalita();
-		void creaLivelli();
+		void creaLivello(int liv);
+		void rimuovi (vector<int> livelli, int pos, int& dim);
 
-	protected:
+	private:
 		int numLivelli;
-		vector<Livello> livelli;
 		vector<Cassa> casse;
 		vector<Muro> muri;
-
+		int** posCasseXi;
+		int** posCasseXf;
+		int** posCasseYi;
+		int** posCasseYf;
+		int** posMuriX;
+		int** posMuriY;
+		int* posGiocatoreX;
+		int* posGiocatoreY;
+		int* numCasse;
+		int* numMuri;
 };
 
 

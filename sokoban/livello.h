@@ -6,21 +6,24 @@
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
 #include<vector>
+#include<stack>
 #include"muro.h"
 #include"cassa.h"
 #include"giocatore.h"
 class Livello
 {
 	public:
-		Livello(const Giocatore& g, const Cassa& c, const Muro& m);
+		Livello(const Giocatore& g, vector<Cassa> c, vector<Muro> m);
 		void gioca();
-		void destroy(),
+		void destroy();
+		bool Superato();
 
 	private:
-		Giocatore player;
-		vector<Cassa> casse;
+		stack<Mossa> mosse;
 		vector<Muro> muri;
 		void inizializzaAllegro();
+		ALLEGRO_BITMAP* cassa;
+		ALLEGRO_BITMAP* muro;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;

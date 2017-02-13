@@ -2,13 +2,20 @@
 
 Giocatore::Giocatore(int x, int y)
 {
-	this->inizializzaAllegro();
 	x_iniziale=x;
 	y_iniziale=y;
 	player_x=x;
 	player_y=y;
-	movespeed=5;
-	player=al_load_bitmap("george.png");
+}
+
+Giocatore::Giocatore(const Giocatore& g)
+{
+	x_iniziale=g.x_iniziale;
+	y_iniziale=g.y_iniziale;
+	player_x=g.player_x;
+	player_y=g.player_y;
+	player=g.player;
+
 }
 
 Giocatore& Giocatore::operator=(const Giocatore &g)
@@ -19,47 +26,41 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 		y_iniziale=g.y_iniziale;
 		player_x=g.player_x;
 		player_y=g.player_y;
-		movespeed=g.movespeed;
 		player=g.player;
 	}
 	
 	return *this;
 }
 
-int Giocatore::spostaSU()
+int Giocatore::spostaSU(int movespeed)
 {
 	if(player_y>0)
-	   return player_y -= movespeed;
+	  player_y -= movespeed;
 
+	return player_y;
 }
 
-int Giocatore::spostaGIU()
+int Giocatore::spostaGIU(int movespeed)
 {
-	 if(player_y<600 - al_get_bitmap_width(player) / 4)
-		return player_y+= movespeed;
+	 if(player_y< 600)//- al_get_bitmap_width(player) / 4)
+		 player_y+= movespeed;
+
+  	 return player_y;
 }
 
-int Giocatore::spostaDX()
+int Giocatore::spostaDX(int movespeed)
 {
-	if(player_x<800 - al_get_bitmap_width(player) / 4) 
- 	   return player_x += movespeed;
+	if(player_x<800 )//- al_get_bitmap_width(player) / 4) 
+ 	   player_x += movespeed;
+
+	return player_x;
 }
 
-int Giocatore::spostaSX()
+int Giocatore::spostaSX(int movespeed)
 {	
 	if(player_x>0)
-	   return player_x -= movespeed;
+	  player_x -= movespeed;
+
+	return player_x;
 }
 
-void Giocatore::inizializzaAllegro()
-{
-	if(!al_init())
-	{
-		cerr<<"no allegro"<<endl;
-	}
-}
-
-void Giocatore::destroy()
-{
-	this->al_destroy_bitmap(player);
-}
