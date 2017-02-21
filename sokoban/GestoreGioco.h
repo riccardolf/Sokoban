@@ -13,27 +13,27 @@ using namespace std;
 
 class GestoreGioco
 {
-	public:
-		GestoreGioco();
-		~GestoreGioco();
-		void Modalita();
-		void creaLivello(int liv);
+public:
+	GestoreGioco();
+	~GestoreGioco();
+	void Modalita();
+	void creaLivello(int liv);
 
-	private:
-		void inizializzaAllegro();
-		int numLivelli;
-		vector<Cassa*> casse;
-		vector<Muro*> muri;
-		int** posCasseXi;
-		int** posCasseXf;
-		int** posCasseYi;
-		int** posCasseYf;
-		int** posMuriX;
-		int** posMuriY;
-		int* posGiocatoreX;
-		int* posGiocatoreY;
-		int* numCasse;
-		int* numMuri;
+private:
+	void inizializzaAllegro();
+	int numLivelli;
+	vector<Cassa*> casse;
+	vector<Muro*> muri;
+	int** posCasseXi;
+	int** posCasseXf;
+	int** posCasseYi;
+	int** posCasseYf;
+	int** posMuriX;
+	int** posMuriY;
+	int* posGiocatoreX;
+	int* posGiocatoreY;
+	int* numCasse;
+	int* numMuri;
 };
 
 
