@@ -15,10 +15,10 @@ class Livello
 	public:
 		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
 		void gioca();
-		void destroy();
 		bool Superato(const vector<Cassa*> casse) const;
 
-	private:
+	private:	
+		int** mappa;
 		stack<Mossa*> mosse;
 		vector<Muro*> muri;
 		void inizializzaAllegro();

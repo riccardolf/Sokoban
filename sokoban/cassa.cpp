@@ -6,6 +6,7 @@ Cassa::Cassa(int xI, int yI, int xF, int yF)
 	cassa_y=yI;
 	x_finale=xF;
 	y_finale=yF;
+	movespeed=64;
 }
 
 Cassa::Cassa(const Cassa& c)
@@ -14,6 +15,7 @@ Cassa::Cassa(const Cassa& c)
 	y_finale=c.y_finale;
 	cassa_x=c.cassa_x;
 	cassa_y=c.cassa_y;
+	movespeed=c.movespeed;
 }
 
 Cassa& Cassa::operator=(const Cassa& c)
@@ -24,29 +26,24 @@ Cassa& Cassa::operator=(const Cassa& c)
 		y_finale=c.y_finale;
 		cassa_x=c.cassa_x;
 		cassa_y=c.cassa_y;
+		movespeed=c.movespeed;
 	}
 	
 	return *this;
 }
 
-void Cassa::spostaSU()
+void Cassa::sposta(int dir)
 {
-	cassa_y+=1.0;
-}
+	//DOWN = 0, LEFT=1,UP=2, RIGHT=3
 
-void Cassa::spostaGIU()
-{
-	cassa_y-=1.0;
-}
-
-void Cassa::spostaDX()
-{
-	cassa_x+=1.0;
-}
-
-void Cassa::spostaSX()
-{
-	cassa_x-=1.0;
+	if(dir==2)
+		cassa_y-=movespeed;
+	else if(dir==0)
+		cassa_y+=movespeed;
+	else if(dir==1)
+		cassa_x-=movespeed;
+	else if(dir==3)
+		cassa_x+=movespeed;
 }
 
 bool Cassa::verifica()

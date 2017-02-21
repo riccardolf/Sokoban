@@ -6,6 +6,7 @@ Giocatore::Giocatore(int x, int y)
 	y_iniziale=y;
 	player_x=x;
 	player_y=y;
+	movespeed=64;
 }
 
 Giocatore::Giocatore(const Giocatore& g)
@@ -14,6 +15,7 @@ Giocatore::Giocatore(const Giocatore& g)
 	y_iniziale=g.y_iniziale;
 	player_x=g.player_x;
 	player_y=g.player_y;
+	movespeed=g.movespeed;
 
 }
 
@@ -25,40 +27,21 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 		y_iniziale=g.y_iniziale;
 		player_x=g.player_x;
 		player_y=g.player_y;
+		movespeed=g.movespeed;
 	}
 	
 	return *this;
 }
 
-int Giocatore::spostaSU(int movespeed)
+int Giocatore::sposta(int dir)
 {
-	if(player_y>0)
-	  player_y -= movespeed;
-
-	return player_y;
-}
-
-int Giocatore::spostaGIU(int movespeed)
-{
-	 if(player_y< 600)//- al_get_bitmap_width(player) / 4)
-		 player_y+= movespeed;
-
-  	 return player_y;
-}
-
-int Giocatore::spostaDX(int movespeed)
-{
-	if(player_x<800 )//- al_get_bitmap_width(player) / 4) 
- 	   player_x += movespeed;
-
-	return player_x;
-}
-
-int Giocatore::spostaSX(int movespeed)
-{	
-	if(player_x>0)
-	  player_x -= movespeed;
-
-	return player_x;
+	if(dir==2)
+		return player_y-=movespeed;
+	else if(dir==0)
+		return player_y+=movespeed;	
+	else if(dir==1)
+		return player_x-=movespeed;	
+	else if(dir==3)
+		return player_x+=movespeed;	
 }
 

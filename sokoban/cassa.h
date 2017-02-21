@@ -2,17 +2,14 @@
 #define CASSA_H
 #include<iostream>
 using namespace std;
-
 class Cassa
 {
 	public:
 		Cassa(int xI, int yI, int xF, int yF);
 		Cassa(const Cassa& c);
 		Cassa& operator=(const Cassa& c);
-		void spostaSU();
-		void spostaGIU();
-		void spostaDX();
-		void spostaSX();
+		~Cassa() { }
+		void sposta(int dir);
 		int getX() const {return cassa_x;}
 		int getY() const {return cassa_y;}
 		int getEndX() const {return x_finale;}
@@ -24,6 +21,7 @@ class Cassa
 		int y_finale;
 		int cassa_x;
 		int cassa_y;
+		int movespeed;
 };
 
 #endif

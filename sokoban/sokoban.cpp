@@ -6,7 +6,7 @@ int main()
 
 	GestoreGioco sokoban;
 
-	//sokoban.Modalita();
+	sokoban.Modalita();
 
 return 0;
 }

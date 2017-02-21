@@ -18,9 +18,9 @@ class GestoreGioco
 		~GestoreGioco();
 		void Modalita();
 		void creaLivello(int liv);
-		void rimuovi (vector<int> livelli, int pos, int& dim);
 
 	private:
+		void inizializzaAllegro();
 		int numLivelli;
 		vector<Cassa*> casse;
 		vector<Muro*> muri;

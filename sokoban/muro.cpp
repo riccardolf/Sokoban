@@ -16,3 +16,9 @@ Muro& Muro::operator=(const Muro& m)
 		
 	return *this;
 }
+
+Muro::Muro(const Muro& m)
+{
+	muro_x=m.muro_x;
+	muro_y=m.muro_y;
+}
