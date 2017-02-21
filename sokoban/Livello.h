@@ -12,21 +12,21 @@
 
 class Livello
 {
-	public:
-		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
-		void gioca();
-		bool Superato(const vector<Cassa*> casse) const;
+public:
+	Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
+	void gioca();
+	bool Superato() const;
 
-	private:	
-		int** mappa;
-		stack<Mossa*> mosse;
-		vector<Muro*> muri;
-		void inizializzaAllegro();
-		ALLEGRO_BITMAP* cassa;
-		ALLEGRO_BITMAP* muro;
-		ALLEGRO_DISPLAY* display;
-		ALLEGRO_TIMER* timer;
-		ALLEGRO_EVENT_QUEUE* event_queue;
-
+private:
+	int** mappa;
+	stack<Mossa*> mosse;
+	vector<Muro*> muri;
+	void inizializzaAllegro();
+	ALLEGRO_BITMAP* cassa;
+	ALLEGRO_BITMAP* muro;
+	ALLEGRO_DISPLAY* display;
+	ALLEGRO_TIMER* timer;
+	ALLEGRO_EVENT_QUEUE* event_queue;
+	int** fine;
 };
 #endif

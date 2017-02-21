@@ -1,4 +1,4 @@
-include"GestoreGioco.h"
+#include"GestoreGioco.h"
 
 GestoreGioco::GestoreGioco()
 {
@@ -332,7 +332,7 @@ void GestoreGioco::Modalita()
 	}
 	}
 
-	if(x>=arcade_x && x<=arcade_x+64 && y>=arcade_y && y<=arcade_y+64)			// 64 Ã¨ la dimensione del bitmap, da cambiare in caso
+	if(x>=arcade_x && x<=arcade_x+64 && y>=arcade_y && y<=arcade_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
 	{
 	int num=numLivelli;
 	vector<int> livelli;
@@ -347,7 +347,7 @@ void GestoreGioco::Modalita()
 	creaLivello(9);
 	}
 
-	else if(x>=scegli_x && x<=scegli_x+64 && y>=scegli_y && y<=scegli_y+64)			// 64 Ã¨ la dimensione del bitmap, da cambiare in caso
+	else if(x>=scegli_x && x<=scegli_x+64 && y>=scegli_y && y<=scegli_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
 	{
 	int liv_x[numLivelli]={ };
 	int liv_y[numLivelli]={ };
