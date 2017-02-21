@@ -23,7 +23,6 @@ class Livello
 		vector<Muro*> muri;
 		int** fine;
 		void inizializzaAllegro();
-		ALLEGRO_BITMAP* cassa;
 		ALLEGRO_BITMAP* muro;
 		ALLEGRO_BITMAP* giocatore;
 		ALLEGRO_DISPLAY* display;

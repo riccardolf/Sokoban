@@ -70,13 +70,19 @@ void Livello::drawMap() const
 
 	vector<Cassa*> casse=mosse.top()->getCasse();	
 
-	cout<<"cassa_x= "<<casse[1]->getX()<<"   cassa_y= "<<casse[1]->getY()<<endl;
 	for(int i=0; i<casse.size(); i++)
 		al_draw_filled_circle(casse[i]->getEndX(),casse[i]->getEndY(), 7, al_map_rgb(255,0,0));						
 
 	for(int i=0; i<casse.size(); i++)
+	{	
+		ALLEGRO_BITMAP* cassa=NULL;
+		if(casse[i]->verifica())
+			cassa=al_load_bitmap("boxColor.png");
+		else
+			cassa=al_load_bitmap("box.png");
 		al_draw_bitmap(cassa, casse[i]->getX(), casse[i]->getY(), 0);
-
+		al_destroy_bitmap(cassa);
+	}
 
 	al_draw_bitmap(undo, undo_x, undo_y, 0);
 //	al_draw_bitmap(rigioca, rigioca_x, rigioca_y,0);
@@ -274,10 +280,7 @@ void Livello::gioca()
 				y=player.getY();
 				mappa=mosse.top()->getMappa();
 					
-
-				for(int i=0; i<casse.size(); i++)
-					al_draw_bitmap(cassa, casse[i]->getX(), casse[i]->getY(), 0);
-				//drawMap();
+				drawMap();
 				al_draw_bitmap_region(giocatore, dir * al_get_bitmap_width(giocatore)/4, sourceY, al_get_bitmap_width(giocatore)/4, 										al_get_bitmap_height(giocatore) /4 , x, y, 0);
 	
 				al_flip_display();		
@@ -291,7 +294,6 @@ void Livello::gioca()
 			clear(mosse);
 			mosse.pop();
 		//	delete muri;
-			al_destroy_bitmap(cassa);
 			al_destroy_bitmap(muro);
 			al_destroy_timer(timer);
 			al_destroy_event_queue(event_queue);
@@ -370,7 +372,6 @@ void Livello::inizializzaAllegro()
 	}
 
 	giocatore = al_load_bitmap("bgeorge.png");
-	cassa=al_load_bitmap("box.png");
 	muro=al_load_bitmap("wall.png");
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
