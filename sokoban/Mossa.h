@@ -1,19 +1,33 @@
 #ifndef MOSSA_H
 #define MOSSA_H
-#include"cassa.h"
-#include"giocatore.h"
+#include"Cassa.h"
+#include"Giocatore.h"
 
 class Mossa
 {
-public:
-	Mossa(const Giocatore& g, vector<Cassa*> c) { player = g; casse = c; }
+	public:
+		Mossa(const Giocatore& g, vector<Cassa*> c, int** m)	
+		{	
+			player=g;
+			for(int i=0; i<c.size(); i++)
+				casse.push_back(c[i]);
+			mappa=new int*[12];
+			for(int i=0; i<12; i++)
+				mappa[i]=new int[10];
+
+			for(int i=0; i<12; i++)
+				for(int j=0; j<10; j++)
+					mappa[i][j]=m[i][j];
+		}
 	//	~Mossa()   { delete player;	delete casse; }
-	Giocatore getPlayer() const { return player; }
-	vector<Cassa*> getCasse() const { return casse; }
+		Giocatore getPlayer() const	{return player;}
+		vector<Cassa*> getCasse() const	{return casse;}
+		int** getMappa() const {return mappa;}
 
-private:
-	Giocatore player;
-	vector<Cassa*> casse;
-
+	private:
+		int** mappa;
+		Giocatore player;
+		vector<Cassa*> casse;
+		
 };
 #endif

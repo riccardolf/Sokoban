@@ -7,26 +7,27 @@
 #include<allegro5/allegro_primitives.h>
 #include<vector>
 #include<stack>
-#include"mossa.h"
-#include"muro.h" 
+#include"Mossa.h"
+#include"Muro.h" 
 
 class Livello
 {
-public:
-	Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
-	void gioca();
-	bool Superato() const;
+	public:
+		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
+		void gioca();
+		void drawMap() const;
+		bool Superato() const;
+	private:	
+		int** mappa;
+		stack<Mossa*> mosse;
+		vector<Muro*> muri;
+		int** fine;
+		void inizializzaAllegro();
+		ALLEGRO_BITMAP* muro;
+		ALLEGRO_BITMAP* giocatore;
+		ALLEGRO_DISPLAY* display;
+		ALLEGRO_TIMER* timer;
+		ALLEGRO_EVENT_QUEUE* event_queue;
 
-private:
-	int** mappa;
-	stack<Mossa*> mosse;
-	vector<Muro*> muri;
-	void inizializzaAllegro();
-	ALLEGRO_BITMAP* cassa;
-	ALLEGRO_BITMAP* muro;
-	ALLEGRO_DISPLAY* display;
-	ALLEGRO_TIMER* timer;
-	ALLEGRO_EVENT_QUEUE* event_queue;
-	int** fine;
 };
 #endif
