@@ -4,23 +4,23 @@ GestoreGioco::GestoreGioco()
 {
 	this->inizializzaAllegro();
 	numLivelli=9;
-	numCasse = new int[numLivelli+1];
-	numMuri = new int[numLivelli+1];
-	posCasseXi = new int*[numLivelli+1];
-	posCasseXf = new int*[numLivelli+1];
-	posCasseYi = new int*[numLivelli+1];
-	posCasseYf = new int*[numLivelli+1];
-	posMuriX = new int*[numLivelli+1];
-	posMuriY = new int*[numLivelli+1];
-	posGiocatoreX = new int[numLivelli+1];
-	posGiocatoreY = new int[numLivelli+1];
-					//  1   2   3   4   5   6   7   8   9  10
- 	int nCasse[] = {2,  0,  0,  0,  0,  0,  0,  0,  0,  0};
-	int nMuri[] = {23,  0,  0,  0,  0,  0,  0,  0,  0,  0};
-	int PGx[] =   {2, 0,  0,  0,  0,  0,  0,  0,  0,  0};
-	int PGy[] =  {3,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+	numCasse = new int[numLivelli+2];
+	numMuri = new int[numLivelli+2];
+	posCasseXi = new int*[numLivelli+2];
+	posCasseXf = new int*[numLivelli+2];
+	posCasseYi = new int*[numLivelli+2];
+	posCasseYf = new int*[numLivelli+2];
+	posMuriX = new int*[numLivelli+2];
+	posMuriY = new int*[numLivelli+2];
+	posGiocatoreX = new int[numLivelli+2];
+	posGiocatoreY = new int[numLivelli+2];
+				//  1  2  3  4   5  6  7  8  9 10 11
+ 	int nCasse[] ={ 2, 3, 8, 4,  4, 3, 7, 5, 4, 1, 3 };
+	int nMuri[] = {23,39,48,37, 28,36,35,26,29,12,35 };
+	int PGx[] =   { 2, 2, 5, 8,  6, 4, 4, 5, 4, 4, 2 };
+	int PGy[] =   { 3, 8, 9, 3,  5, 7, 3, 3, 7, 5, 7 };
 
-	for(int i=0; i<=numLivelli; i++)
+	for(int i=0; i<numLivelli+2; i++)
 	{
 		posGiocatoreX[i] = PGx[i];
 		posGiocatoreY[i] = PGy[i];
@@ -55,12 +55,12 @@ GestoreGioco::GestoreGioco()
 		posMuriY[0][i]=MuriY[i];
 		posMuriX[0][i]=MuriX[i];
 	}
-/*
+
 // livello 2
-	int CasseXi2[] ={  };	
-	int CasseXf2[] ={  };
-	int CasseYi2[] = { };
-	int CasseYf2[] = {  };
+	int CasseXi2[] = {3,3,4};	
+	int CasseYi2[] = {7,6,7};
+	int CasseXf2[] = {8,8,8};
+	int CasseYf2[] = {4,5,6};
 
 	for(int i=0; i<numCasse[1]; i++)
 	{
@@ -70,8 +70,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[1][i]=CasseYf2[i];
 	}
 
-	int MuriX2[] = {   };
-	int MuriY2[] = {  };
+	int MuriX2[] = {2,3,4,5,6,6,6,7,8,9,9,9,9,9,9,8,7,7,7,6,5,5,5,5,5,4,3,2,1,1,1,1,1,2,3,3,2,2,2};
+	int MuriY2[] = {1,1,1,1,1,2,3,2,2,2,3,4,5,6,7,7,7,6,5,5,5,6,7,8,9,9,9,9,9,8,7,6,5,5,5,4,4,3,2};
 
 	for(int i=0; i<numMuri[1]; i++)
 	{
@@ -80,10 +80,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 3
-	int CasseXi3[] ={  };	
-	int CasseXf3[] ={  };
-	int CasseYi3[] = { };
-	int CasseYf3[] = {  };
+	int CasseXi3[] ={2,9,3,4,5,6,7,8};	
+	int CasseYi3[] ={3,3,8,8,8,8,8,8};
+	int CasseXf3[] ={2,4,5,6,7,9,1,10};
+	int CasseYf3[] ={2,2,2,2,2,2,5,5};
 
 	for(int i=0; i<numCasse[2]; i++)
 	{
@@ -93,8 +93,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[2][i]=CasseYf3[i];
 	}
 
-	int MuriX3[] = {   };
-	int MuriY3[] = {  };
+	int MuriX3[] = {1,2,3,4,5,6,7,8,9,10,10,10,10,11,11,11,11,10,10,10,10,9,8,7,6,5,4,3,2,1,1,1,1,0,0,0,0,1,1,1,3,4,7,8,4,5,6,7};
+	int MuriY3[] = {1,1,1,1,1,1,1,1,1,1,2,3,4,4,5,6,7,7,8,9,10,10,10,10,10,10,10,10,10,10,9,8,7,7,6,5,4,4,3,2,3,3,3,3,5,6,6,5};
 
 	for(int i=0; i<numMuri[2]; i++)
 	{
@@ -103,11 +103,11 @@ GestoreGioco::GestoreGioco()
 	}
 
 
-//livello 4
-	int CasseXi4[] ={  };	
-	int CasseXf4[] ={  };
-	int CasseYi4[] = { };
-	int CasseYf4[] = {  };
+//livello 4 
+	int CasseXi4[] = {2,3,8,9};	
+	int CasseYi4[] = {5,4,5,4};	
+	int CasseXf4[] = {4,5,6,7};
+	int CasseYf4[] = {4,4,4,4};
 
 	for(int i=0; i<numCasse[3]; i++)
 	{
@@ -117,8 +117,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[3][i]=CasseYf4[i];
 	}
 
-	int MuriX4[] = {   };
-	int MuriY4[] = {  };
+	int MuriX4[] = {1,2,3,4,5,6,6,7,8,9,10,10,11,11,11,11,11,10,9,8,7,7,7,6,5,4,4,4,3,2,1,1,0,0,0,0,1};
+	int MuriY4[] = {2,2,2,2,2,2,3,2,2,2, 2, 3, 3, 4, 5, 6, 7, 7,7,7,7,6,5,5,5,5,6,7,7,7,7,6,6,5,4,3,3};
 
 	for(int i=0; i<numMuri[3]; i++)
 	{
@@ -127,12 +127,12 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 5
-	int CasseXi5[] ={  };	
-	int CasseXf5[] ={  };
-	int CasseYi5[] = { };
-	int CasseYf5[] = {  };
+	int CasseXi5[] = {5,5,6,7};	
+	int CasseYi5[] = {4,5,6,4};
+    int CasseXf5[] = {3,5,6,8};
+	int CasseYf5[] = {5,2,7,4};
 
-	for(int i=0; i<numCasse[4[; i++)
+	for(int i=0; i<numCasse[4]; i++)
 	{
 		posCasseXi[4][i]=CasseXi5[i];
 		posCasseXf[4][i]=CasseXf5[i];
@@ -140,20 +140,20 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[4][i]=CasseYf5[i];
 	}
 
-	int MuriX5[] = {   };
-	int MuriY5[] = {  };
+	int MuriX5[] = {4,5,6,6,6,7,8,9,9,9,8,7,7,7,7,6,5,5,5,4,3,2,2,2,3,4,4,4};
+	int MuriY5[] = {1,1,1,2,3,3,3,3,4,5,5,5,6,7,8,8,8,7,6,6,6,6,5,4,4,4,3,2};
 
 	for(int i=0; i<numMuri[4]; i++)
 	{
 		posMuriY[4][i]=MuriY5[i];
 		posMuriX[4][i]=MuriX5[i];
 	}
-
+	
 //livello 6
-	int CasseXi6[] ={  };	
-	int CasseXf6[] ={  };
-	int CasseYi6[] = { };
-	int CasseYf6[] = {  };
+	int CasseXi6[] = {3,4,6};  
+	int CasseYi6[] = {3,5,4};  
+	int CasseXf6[] = {5,6,7};
+	int CasseYf6[] = {7,7,7};
 
 	for(int i=0; i<numCasse[5]; i++)
 	{
@@ -163,8 +163,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[5][i]=CasseYf6[i];
 	}
 
-	int MuriX3[] = {   };
-	int MuriY3[] = {  };
+	int MuriX6[] = {1,2,3,4,5,5,6,7,8,9,9,9,9,9,8,8,8,7,6,5,4,3,2,2,2,2,1,1,1,1,5,5,7,7,6,3};
+	int MuriY6[] = {1,1,1,1,1,2,2,2,2,2,3,4,5,6,6,7,8,8,8,8,8,8,8,7,6,5,5,4,3,2,3,4,4,6,6,5};
 
 	for(int i=0; i<numMuri[5]; i++)
 	{
@@ -173,10 +173,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 7
-	int CasseXi7[] ={  };	
-	int CasseXf7[] ={  };
-	int CasseYi7[] = { };
-	int CasseYf7[] = {  };
+	int CasseXi7[] = {3,5,6,7,6,6,5};	
+	int CasseYi7[] = {7,7,7,7,5,4,3};
+	int CasseXf7[] = {3,3,5,6,8,6,7};
+	int CasseYf7[] = {3,5,7,8,7,6,4};
 
 	for(int i=0; i<numCasse[6]; i++)
 	{
@@ -186,8 +186,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[6][i]=CasseYf7[i];
 	}
 
-	int MuriX7[] = {   };
-	int MuriY7[] = {  };
+	int MuriX7[] = {4,5,6,7,8,8,8,8,8,8,9,9,9,9,8,7,6,5,4,3,2,2,2,2,2,2,2,2,3,4,3,4,4,4,5};
+	int MuriY7[] = {1,1,1,1,1,2,3,4,5,6,6,7,8,9,9,9,9,9,9,9,9,8,7,6,5,4,3,2,2,2,4,4,5,6,5};
 
 	for(int i=0; i<numMuri[6]; i++)
 	{
@@ -196,10 +196,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 8
-	int CasseXi8[] ={  };	
-	int CasseXf8[] ={  };
-	int CasseYi8[] = { };
-	int CasseYf8[] = {  };
+	int CasseXi8[] = {6,5,6,5,6};	
+	int CasseYi8[] = {3,4,5,6,7};
+	int CasseXf8[] = {4,4,5,6,7};
+	int CasseYf8[] = {6,7,7,7,7};
 
 	for(int i=0; i<numCasse[7]; i++)
 	{
@@ -209,8 +209,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[7][i]=CasseYf8[i];
 	}
 
-	int MuriX8[] = {   };
-	int MuriY8[] = {  };
+	int MuriX8[] = {4,5,6,7,7,7,7,8,8,8,8,8,7,6,5,4,3,3,3,3,4,4,3,3,3,4};
+	int MuriY8[] = {1,1,1,1,2,3,4,4,5,6,7,8,8,8,8,8,8,7,6,5,5,4,4,3,2,2};
 
 	for(int i=0; i<numMuri[7]; i++)
 	{
@@ -219,10 +219,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 9
-	int CasseXi9[] ={  };	
-	int CasseXf9[] ={  };
-	int CasseYi9[] = { };
-	int CasseYf9[] = {  };
+	int CasseXi9[] = {6,5,6,7};	
+	int CasseYi9[] = {4,5,6,6};
+	int CasseXf9[] = {5,6,6,7 };
+	int CasseYf9[] = {2,2,3,4};
 
 	for(int i=0; i<numCasse[8]; i++)
 	{
@@ -232,8 +232,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[8][i]=CasseYf9[i];
 	}
 
-	int MuriX9[] = {   };
-	int MuriY9[] = {  };
+	int MuriX9[] = {2,3,4,5,6,7,8,9,9,9,9,8,8,8,7,7,7,6,5,4,4,4,3,3,3,2,2,2,5};
+	int MuriY9[] = {8,8,8,8,8,8,8,8,7,6,5,5,4,3,3,2,1,1,1,1,2,3,3,4,5,5,6,7,6};
 
 	for(int i=0; i<numMuri[8]; i++)
 	{
@@ -242,10 +242,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 //livello 10
-	int CasseXi10[] ={  };	
-	int CasseXf10[] ={  };
-	int CasseYi10[] = { };
-	int CasseYf10[] = {  };
+	int CasseXi10[] = {5};	
+	int CasseYi10[] = {5};
+	int CasseXf10[] = {6};
+	int CasseYf10[] = {5};
 
 	for(int i=0; i<numCasse[9]; i++)
 	{
@@ -255,15 +255,38 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[9][i]=CasseYf10[i];
 	}
 
-	int MuriX10[] = {   };
-	int MuriY10[] = {  };
+	int MuriX10[] = {3,4,5,6,7,7,7,6,5,4,3,3};
+	int MuriY10[] = {4,4,4,4,4,5,6,6,6,6,6,5};
 
 	for(int i=0; i<numMuri[9]; i++)
 	{
 		posMuriY[9][i]=MuriY10[i];
 		posMuriX[9][i]=MuriX10[i];
 	}
-*/
+	
+	//livello 11
+	int CasseXi11[] = {4,4,4};
+	int CasseYi11[] = {4,5,6,};
+	int CasseXf11[] = {5,5,5};
+	int CasseYf11[] = {4,5,6};
+
+	for (int i = 0; i<numCasse[10]; i++)
+	{
+		posCasseXi[10][i] = CasseXi11[i];
+		posCasseXf[10][i] = CasseXf11[i];
+		posCasseYi[10][i] = CasseYi11[i];
+		posCasseYf[10][i] = CasseYf11[i];
+	}
+
+	int MuriX11[] = {3,4,5,6,6,7,8,8,8,9,9,9,9,9,8,7,6,5,4,3,2,1,1,1,1,1,2,3,3,3,6,6,7,5,3};
+	int MuriY11[] = {1,1,1,1,2,2,2,3,4,4,5,6,7,8,8,8,8,8,8,8,8,8,7,6,5,4,4,4,3,2,4,5,6,7,6};
+
+	for (int i = 0; i<numMuri[10]; i++)
+	{
+		posMuriY[10][i] = MuriY11[i];
+		posMuriX[10][i] = MuriX11[i];
+	}
+	
 }
 GestoreGioco::~GestoreGioco()
 {
@@ -322,8 +345,7 @@ void GestoreGioco::Modalita()
 {
 		
 	srand(time(0));
-	creaLivello(0);
-	/*ALLEGRO_DISPLAY* display=al_create_display(800,700);	
+	ALLEGRO_DISPLAY* display=al_create_display(800,700);	
 	if(!display)
 	{
 		cerr<<"no display"<<endl;
@@ -346,31 +368,30 @@ void GestoreGioco::Modalita()
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_mouse_event_source());	
 
-	//ALLEGRO_BITMAP* arcade=al_load_bitmap("");
-//	ALLEGRO_BITMAP* scegli=al_load_bitmap("");
+	ALLEGRO_BITMAP* arcade=al_load_bitmap("arcade.png");
+	ALLEGRO_BITMAP* scegli=al_load_bitmap("Livelli.png");
 	
-	int arcade_x, arcade_y, scegli_x, scegli_y, x=0, y=0;
+	int arcade_x=60, arcade_y=560, scegli_x=200, scegli_y=454, x=0, y=0;
 	
-	creaLivello(0);
 	//cout<<"Scegli modalita"<<endl; 		// poi va cambiato con i bitmap per i messaggi
 	al_clear_to_color(al_map_rgb(0,0,0));
-	//al_draw_bitmap(arcade, arcade_x,arcade_y,0);
-	//al_draw_bitmap(scegli, scegli_x,scegli_y,0);
+	al_draw_bitmap(arcade, arcade_x,arcade_y,0);
+	al_draw_bitmap(scegli, scegli_x,scegli_y,0);
 	al_flip_display();
 	al_start_timer(timer);	
 
-	/*while(true)		
+	while (true)
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-		if(ev.type == ALLEGRO_EVENT_TIMER)			
-			if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		if (ev.type == ALLEGRO_EVENT_TIMER)
+			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 			{
-				x=ev.mouse.x;
-				y=ev.mouse.y;
+				x = ev.mouse.x;
+				y = ev.mouse.y;
 				break;
 			}
-	}	
+	}
 	
 	if(x>=arcade_x && x<=arcade_x+64 && y>=arcade_y && y<=arcade_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
 	{	
@@ -389,7 +410,7 @@ void GestoreGioco::Modalita()
 		creaLivello(9);
 	}
 	
-	else if(x>=scegli_x && x<=scegli_x+64 && y>=scegli_y && y<=scegli_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
+	/*else if(x>=scegli_x && x<=scegli_x+64 && y>=scegli_y && y<=scegli_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
 	{
 		int liv_x[numLivelli]={ };
 		int liv_y[numLivelli]={ };
@@ -435,16 +456,16 @@ void GestoreGioco::Modalita()
 						break;
 				}
 			}			
+			*/
+//			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+	//			break;	
+		//}	
 
-			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-				break;	
-		}	
+		/*for(int i=0; i<numLivelli; i++)
+			al_destroy_bitmap(liv[i]);*/	
+	
 
-		for(int i=0; i<numLivelli; i++)
-			al_destroy_bitmap(liv[i]);	
-	}
-
-	al_destroy_bitmap(arcade);
+/*	al_destroy_bitmap(arcade);
 	al_destroy_bitmap(scegli);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(event_queue);
