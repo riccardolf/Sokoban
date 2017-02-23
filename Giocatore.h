@@ -11,15 +11,20 @@ class Giocatore
 		Giocatore() {}		
 		~Giocatore() {}
 		Giocatore& operator=(const Giocatore &g);
-		int sposta(int dir);
+		void MovePlayer();
 		int getX() const {return player_x;}
 		int getY() const {return player_y;}
+		int getDir() const { return Dir; }
+		void setDir(int direction) { Dir = direction; }
+		//void DrawPlayer();
+
 
 	private:
 		int x_iniziale;
 		int y_iniziale;
 		int player_x;
-		int player_y;	
+		int player_y;
+		int Dir;
 };
 
 #endif

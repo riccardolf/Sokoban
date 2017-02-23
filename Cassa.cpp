@@ -6,6 +6,7 @@ Cassa::Cassa(int xI, int yI, int xF, int yF)
 	cassa_y=yI;
 	x_finale=xF;
 	y_finale=yF;
+	point = false;
 }
 
 Cassa::Cassa(const Cassa& c)
@@ -14,6 +15,7 @@ Cassa::Cassa(const Cassa& c)
 	y_finale=c.y_finale;
 	cassa_x=c.cassa_x;
 	cassa_y=c.cassa_y;
+	point = c.point;
 }
 
 Cassa& Cassa::operator=(const Cassa& c)
@@ -24,6 +26,7 @@ Cassa& Cassa::operator=(const Cassa& c)
 		y_finale=c.y_finale;
 		cassa_x=c.cassa_x;
 		cassa_y=c.cassa_y;
+		point = c.point;
 	}
 	
 	return *this;
@@ -41,12 +44,4 @@ void Cassa::sposta(int dir)
 		cassa_x--;
 	else if (dir == 3)
 		cassa_x++;
-}
-
-bool Cassa::verifica() const
-{
-	if(cassa_x==x_finale && cassa_y==y_finale)
-		return true;
-
-	return false;
 }

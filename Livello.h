@@ -9,6 +9,7 @@
 #include<stack>
 #include"Mossa.h"
 #include"Muro.h" 
+#include"Cassa.h"
 
 class Livello
 {
@@ -16,18 +17,21 @@ class Livello
 		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
 		void gioca();
 		void drawMap() const;
-		bool Superato() const;
+		bool Done(vector<Cassa*> casse) const;
 	private:	
 		int** mappa;
 		stack<Mossa*> mosse;
 		vector<Muro*> muri;
-		int** fine;
 		void inizializzaAllegro();
-		ALLEGRO_BITMAP* muro;
-		ALLEGRO_BITMAP* giocatore;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;
+		ALLEGRO_BITMAP* Undo;
+		ALLEGRO_BITMAP* Rigioca;
+		ALLEGRO_BITMAP* Box;
+		ALLEGRO_BITMAP* BoxColor;
+		ALLEGRO_BITMAP* Player;
+		ALLEGRO_BITMAP* Wall;
 
 };
 #endif

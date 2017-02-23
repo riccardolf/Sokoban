@@ -6,6 +6,8 @@ Giocatore::Giocatore(int x, int y)
 	y_iniziale=y;
 	player_x=x;
 	player_y=y;
+	Dir = 0;
+	
 }
 
 Giocatore::Giocatore(const Giocatore& g)
@@ -14,6 +16,7 @@ Giocatore::Giocatore(const Giocatore& g)
 	y_iniziale=g.y_iniziale;
 	player_x=g.player_x;
 	player_y=g.player_y;
+	Dir = g.Dir;
 }
 
 Giocatore& Giocatore::operator=(const Giocatore &g)
@@ -24,20 +27,21 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 		y_iniziale=g.y_iniziale;
 		player_x=g.player_x;
 		player_y=g.player_y;
+		Dir = g.Dir;
 	}
 	
 	return *this;
 }
 
-int Giocatore::sposta(int dir)
+// UP = 2, LEFT = 1, DOWN = 0, RIGHT = 3
+void Giocatore::MovePlayer()
 {
-	if(dir==2)
-		return player_y--;
-	if(dir==0)
-		return player_y++;	
-	if(dir==1)
-		return player_x--;	
-	if(dir==3)
-		return player_x++;	
+	if (Dir == 2)
+		player_y--;
+	if (Dir == 0)
+		player_y++;
+	if (Dir == 1)
+		player_x--;
+	if (Dir == 3)
+		player_x++;
 }
-

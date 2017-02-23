@@ -13,14 +13,16 @@ class Cassa
 		int getX() const {return cassa_x;}
 		int getY() const {return cassa_y;}
 		int getEndX() const {return x_finale;}
-		int getEndY() const	{return y_finale;}		
-		bool verifica() const;
+		int getEndY() const	{return y_finale;}
+		bool getPoint() const { return point; }
+		void setPoint(bool s) { point = s; }
 
 	private:
 		int x_finale;
 		int y_finale;
 		int cassa_x;
 		int cassa_y;
+		bool point;
 };
 
 #endif
