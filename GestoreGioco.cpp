@@ -326,10 +326,10 @@ void GestoreGioco::creaLivello(int liv)
 	Livello l(player, casse, muri);
 	l.gioca();
 
-	/*for(int i=0; i<numMuri[liv]; i++)
-	delete muri[i];
+	for(int i=0; i<numMuri[liv]; i++)
+		delete muri[i];
 	for(int i=0; i<numCasse[liv]; i++)
-	delete casse[i];*/
+		delete casse[i];
 }
 
 void rimuovi(vector<int> livelli, int pos, int& num)
@@ -344,65 +344,59 @@ void GestoreGioco::Modalita()
 {
 
 	srand(time(0));
-	creaLivello(0);
-	/*ALLEGRO_DISPLAY* display = al_create_display(800, 700);
+
+	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
 	if (!display)
 	{
 		cerr << "no display" << endl;
 	}
-
 	const float FPS = 30;
 	ALLEGRO_TIMER* timer = al_create_timer(1 / FPS);
 	if (!timer)
 	{
 		cerr << "no timer" << endl;
 	}
-
 	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
 	if (!event_queue)
 	{
 		cerr << "no event_queue" << endl;
 	}
-
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
-
+	
 	ALLEGRO_BITMAP* arcade = al_load_bitmap("arcade.png");
 	ALLEGRO_BITMAP* scegli = al_load_bitmap("Livelli.png");
-
-	int arcade_x = 60, arcade_y = 560, scegli_x = 200, scegli_y = 454, x = 0, y = 0;
-
-	//cout<<"Scegli modalita"<<endl; 		// poi va cambiato con i bitmap per i messaggi
-
+	ALLEGRO_BITMAP* sfondo = al_load_bitmap("sfondo.png");
+	int arcade_x = 185, arcade_y = 250, scegli_x = 405, scegli_y = 250, x = 0, y = 0;
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
+	al_draw_bitmap(sfondo,0,0, 0);	
 	al_draw_bitmap(arcade, arcade_x, arcade_y, 0);
 	al_draw_bitmap(scegli, scegli_x, scegli_y, 0);
 	al_flip_display();
-	al_start_timer(timer);
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 
 	while (true)
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-		if (ev.type == ALLEGRO_EVENT_TIMER)
 			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 			{
 				x = ev.mouse.x;
 				y = ev.mouse.y;
 				break;
 			}
+			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+				break;	
 	}
-
-	if (x >= arcade_x && x <= arcade_x + 64 && y >= arcade_y && y <= arcade_y + 64)			// 64 è la dimensione del bitmap, da cambiare in caso
+	if (x >= arcade_x && x <= arcade_x + 183 && y >= arcade_y && y <= arcade_y + 85)
 	{
+		al_destroy_display(display);
 		int num = numLivelli;
 		vector<int> livelli;
-
 		for (int i = 0; i<num; i++)
 			livelli.push_back(i + 1);
-
 		while (num>0)
 		{
 			int liv = rand() % num;
@@ -410,65 +404,64 @@ void GestoreGioco::Modalita()
 			rimuovi(livelli, liv, num);
 		}
 		creaLivello(9);
+		creaLivello(10);
 	}
-
-	/*else if(x>=scegli_x && x<=scegli_x+64 && y>=scegli_y && y<=scegli_y+64)			// 64 è la dimensione del bitmap, da cambiare in caso
-	{
-	int liv_x[numLivelli]={ };
-	int liv_y[numLivelli]={ };
-	vector<ALLEGRO_BITMAP*> liv;
-	for(int i=0; i<numLivelli; i++)
-	liv.push_back(NULL);
-	liv[0]=al_load_bitmap("liv1");
-	liv[1]=al_load_bitmap("liv2");
-	liv[2]=al_load_bitmap("liv3");
-	liv[3]=al_load_bitmap("liv4");
-	liv[4]=al_load_bitmap("liv5");
-	liv[5]=al_load_bitmap("liv6");
-	liv[6]=al_load_bitmap("liv7");
-	liv[7]=al_load_bitmap("liv8");
-	liv[8]=al_load_bitmap("liv9");
-	al_clear_to_color(al_map_rgb(0,0,0));
-
-	for(int i=0; i<numLivelli; i++)
-	al_draw_bitmap(liv[i],liv_x[i],liv_y[i],0);
-
-	al_flip_display();
-
-	while(true)
-	{
-	int x1=0, y1=0;
-	ALLEGRO_EVENT ev;
-	al_wait_for_event(event_queue, &ev);
-	if(ev.type == ALLEGRO_EVENT_TIMER)
-	{
-	if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-	{
-	x1=ev.mouse.x;
-	y1=ev.mouse.y;
-	}
-
-	for(int i=0; i<numLivelli; i++)
-	if(x1>=liv_x[i] && x1<=liv_x[i]+64 && y1>=liv_y[i] && y1<=liv_y[i]+64)
-	{
-	creaLivello(i);
-	break;
-	}
-	}
+	else if(x>=scegli_x && x<=scegli_x+183 && y>=scegli_y && y<=scegli_y+85)	
+	{	
+			int liv_x[numLivelli]={178,326,474,178,326,474,178,326,474};
+			int liv_y[numLivelli]={100,100,100,250,250,250,400,400,400};
+			vector<ALLEGRO_BITMAP*> liv;
+			for(int i=0; i<numLivelli; i++)
+				liv.push_back(NULL);
 	
-	//			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-	//			break;	
-	//}	
+			liv[0]=al_load_bitmap("1.png");
+			liv[1]=al_load_bitmap("2.png");
+			liv[2]=al_load_bitmap("3.png");
+			liv[3]=al_load_bitmap("4.png");
+			liv[4]=al_load_bitmap("5.png");
+			liv[5]=al_load_bitmap("6.png");
+			liv[6]=al_load_bitmap("7.png");
+			liv[7]=al_load_bitmap("8.png");
+			liv[8]=al_load_bitmap("9.png");
+			al_clear_to_color(al_map_rgb(0,0,0));
+		
+		while(true)
+		{	
+			al_draw_bitmap(sfondo,0,0, 0);	
+			for(int i=0; i<numLivelli; i++)
+				al_draw_bitmap(liv[i],liv_x[i],liv_y[i],0);
+			al_flip_display();
 
-	/*for(int i=0; i<numLivelli; i++)
-	al_destroy_bitmap(liv[i]);*/
+			int x1=0, y1=0;
+			ALLEGRO_EVENT ev;
+			al_wait_for_event(event_queue, &ev);
+		
+			if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+			{
+				x1=ev.mouse.x;
+				y1=ev.mouse.y;
+			}
+			for(int i=0; i<numLivelli; i++)
+				if(x1>=liv_x[i] && x1<=liv_x[i]+128 && y1>=liv_y[i] && y1<=liv_y[i]+128)
+				{
+					al_destroy_display(display);
+					creaLivello(i);
+					break;
+				}	
+			if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+				break;	
+		}	
+			for(int i=0; i<numLivelli; i++)
+				al_destroy_bitmap(liv[i]);
+			
+	}
 
-
-	/*	al_destroy_bitmap(arcade);
+	al_destroy_bitmap(arcade);
 	al_destroy_bitmap(scegli);
+	al_destroy_bitmap(sfondo);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(event_queue);
-	al_destroy_display(display);*/
+	
 }
 
 void GestoreGioco::inizializzaAllegro()
@@ -498,3 +491,4 @@ void GestoreGioco::inizializzaAllegro()
 		cerr << "no mouse" << endl;
 	}
 }
+
