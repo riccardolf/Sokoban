@@ -10,33 +10,51 @@ using namespace std;
 
 int main()
 {
-	if (!al_init())
+	if (!al_init()) {
 		cerr << "no allegro" << endl;
-	if (!al_init_image_addon())
+		return -1;
+	}
+	if (!al_init_image_addon()) {
 		cerr << "failed initialisation image" << endl;
-	if (!al_init_primitives_addon())
+		return -1;
+	}
+	if (!al_init_primitives_addon()) {
 		cerr << "failed initialisation primitives" << endl;
-	if (!al_init_native_dialog_addon())
+		return -1;
+	}
+	if (!al_init_native_dialog_addon()) {
 		cerr << "failed initialisation dialog" << endl;
-	if (!al_install_mouse())
+		return -1;
+	}
+	if (!al_install_mouse()) {
 		cerr << "no mouse" << endl;
-	if(!al_install_audio() || !al_init_acodec_addon())
+		return -1;
+	}
+	if (!al_install_audio() || !al_init_acodec_addon()) {
 		cerr << "no audio" << endl;
+		return -1;
+	}
 
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
-	if (!display)
+	if (!display) {
 		cerr << "no display" << endl;
+		return -1;
+	}
 
 	al_set_window_title(display,"Sokoban");
 	
 	const float FPS = 30;
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
-	if (!timer)
+	if (!timer) {
 		cerr << "no timer" << endl;
+		return -1;
+	}
 
 	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
-	if (!event_queue)
+	if (!event_queue) {
 		cerr << "no event_queue" << endl;
+		return -1;
+	}
 
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -50,14 +68,22 @@ int main()
 	ALLEGRO_SAMPLE* song = al_load_sample("Song.ogg");
 	ALLEGRO_SAMPLE_INSTANCE* songInstance = al_create_sample_instance(song);
 
-	if (!arcade)
+	if (!arcade) {
 		cerr << "No Arcade.png" << endl;
-	if (!scegli)
+		return -1;
+	}
+	if (!scegli) {
 		cerr << "No Levels.png" << endl;
-	if (!sfondo)
+		return -1;
+	}
+	if (!sfondo) {
 		cerr << "Background_Init.png" << endl;
-	if (!song)
+		return -1;
+	}
+	if (!song) {
 		cerr << "Song.ogg" << endl;
+		return -1;
+	}
 
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
