@@ -36,7 +36,5 @@ class Livello
 		ALLEGRO_BITMAP* Player;
 		ALLEGRO_BITMAP* Wall;
 		ALLEGRO_BITMAP* sfondo;
-
-
 };
 #endif

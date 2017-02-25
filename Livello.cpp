@@ -80,7 +80,7 @@ void Livello::drawMap(int dir) const
 			else if(mappa[i][j]==2)
 				al_draw_bitmap(Box, i*64 +10, j * 64, 0);
 			else if(mappa[i][j]==3)
-				al_draw_bitmap_region(Player, dir * 64, 0, 64, 64, i*64 +10, j*64 +10, 0);
+				al_draw_bitmap_region(Player, dir * 64, 0, 64, 64, i*64 + 10, j*64, 0);
 		}
 	
 	for (unsigned i = 0; i < casse.size(); i++)
@@ -105,10 +105,10 @@ bool Livello::gioca()
 	bool draw=false;
 	
 	drawMap(dir);
+	al_flush_event_queue(event_queue);
 	
 	//inizio timer e game loop
 	al_start_timer(timer);
-
 	while (true) 
 	{	
 		ALLEGRO_EVENT events;
@@ -347,7 +347,7 @@ void Livello::inizializzaAllegro()
 	}
 	al_set_window_title(display,"Sokoban");
 
-	const float FPS=10;
+	const float FPS = 20;
 	timer=al_create_timer(1/FPS);
 	if(!timer)
 	{
