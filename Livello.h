@@ -3,6 +3,7 @@
 #include<allegro5/allegro.h>
 #include<allegro5/allegro_image.h>
 #include<allegro5/allegro_audio.h>
+#include<allegro5/allegro_acodec.h>
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
 #include<vector>
@@ -30,7 +31,6 @@ class Livello
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;
 		ALLEGRO_BITMAP* Undo;
-	//	ALLEGRO_BITMAP* Rigioca;
 		ALLEGRO_BITMAP* Box;
 		ALLEGRO_BITMAP* BoxColor;
 		ALLEGRO_BITMAP* Player;

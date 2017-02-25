@@ -17,6 +17,7 @@ class Mossa
 				for(int j=0; j<10; j++)
 					mappa[i][j]=m[i][j];
 		}
+		
 		~Mossa()   
 		{	
 			for(int i=0; i<12; i++)

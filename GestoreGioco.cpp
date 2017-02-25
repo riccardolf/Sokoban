@@ -13,11 +13,11 @@ GestoreGioco::GestoreGioco()
 	posMuriY = new int*[numLivelli + 2];
 	posGiocatoreX = new int[numLivelli + 2];
 	posGiocatoreY = new int[numLivelli + 2];
-				//  1  2  3  4   5  6  7  8  9 10 11
-	int nCasse[] = { 2, 3, 8, 4,  4, 3, 7, 5, 4, 1, 3 };
-	int nMuri[] = { 23,39,48,37, 28,36,35,26,29,12,35 };
-	int PGx[] = { 2, 2, 5, 8,  6, 4, 4, 5, 4, 4, 2 };
-	int PGy[] = { 3, 8, 9, 3,  5, 7, 3, 3, 7, 5, 7 };
+			 	 //  1  2  3  4  5  6  7  8  9 10 11
+	int nCasse[] = { 2, 3, 8, 4, 4, 3, 7, 5, 4, 1, 3 };
+	int nMuri[] =  {23,39,48,37,28,36,35,26,29,12,35 };
+	int PGx[] =    { 2, 2, 5, 8, 6, 4, 4, 5, 4, 4, 2 };
+	int PGy[] =    { 3, 8, 8, 3, 5, 7, 3, 3, 7, 5, 7 };
 
 	for (int i = 0; i<numLivelli + 2; i++)
 	{
@@ -80,9 +80,9 @@ GestoreGioco::GestoreGioco()
 
 	//livello 3
 	int CasseXi3[] = { 2,9,3,4,5,6,7,8 };
-	int CasseYi3[] = { 3,3,8,8,8,8,8,8 };
-	int CasseXf3[] = { 2,4,5,6,7,9,1,10 };
-	int CasseYf3[] = { 2,2,2,2,2,2,5,5 };
+	int CasseYi3[] = { 2,2,7,7,7,7,7,7 };
+	int CasseXf3[] = { 2,4,5,6,7,9,1,10};
+	int CasseYf3[] = { 1,1,1,1,1,1,4,4 };
 
 	for (int i = 0; i<numCasse[2]; i++)
 	{
@@ -92,8 +92,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[2][i] = CasseYf3[i];
 	}
 
-	int MuriX3[] = { 1,2,3,4,5,6,7,8,9,10,10,10,10,11,11,11,11,10,10,10,10,9,8,7,6,5,4,3,2,1,1,1,1,0,0,0,0,1,1,1,3,4,7,8,4,5,6,7 };
-	int MuriY3[] = { 1,1,1,1,1,1,1,1,1,1,2,3,4,4,5,6,7,7,8,9,10,10,10,10,10,10,10,10,10,10,9,8,7,7,6,5,4,4,3,2,3,3,3,3,5,6,6,5 };
+	int MuriX3[] = {1,2,3,4,5,6,7,8,9,10,10,10,10,11,11,11,11,10,10,10,10,9,8,7,6,5,4,3,2,1,1,1,1,0,0,0,0,1,1,1,3,4,7,8,4,5,6,7 };
+	int MuriY3[] = {0,0,0,0,0,0,0,0,0, 0, 1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9,9,9,9,9,9,9,9,9,9,8,7,6,6,5,4,3,3,2,1,2,2,2,2,4,5,5,4 };
 
 	for (int i = 0; i<numMuri[2]; i++)
 	{
@@ -336,7 +336,7 @@ bool GestoreGioco::creaLivello(int liv)
 	
 	casse.clear();
 	muri.clear();
-	cout<<"FINE LIV"<<endl;
+
 	return true;
 }
 
