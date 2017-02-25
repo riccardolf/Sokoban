@@ -289,6 +289,7 @@ bool Livello::gioca()
 		//Controllo fine livello
 		if(Done(casse))
 		{
+			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "LIVELLO SUPERATO!", "",0,ALLEGRO_MESSAGEBOX_WARN);
 			clear(mosse, mosse.size());
 			mosse.pop();
 			al_destroy_bitmap(Undo);
