@@ -382,5 +382,5 @@ void Livello::inizializzaAllegro()
 	Box= al_load_bitmap("box.png");
 	BoxColor = al_load_bitmap("boxColor.png");
 	Player = al_load_bitmap("George.png");
-	sfondo = al_load_bitmap("Background.jpg");	
+	sfondo = al_load_bitmap("Background.jpg");
 }

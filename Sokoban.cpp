@@ -61,12 +61,10 @@ int main()
 
 	al_reserve_samples(10);
 	
-	ALLEGRO_BITMAP* arcade = al_load_bitmap("arcade.png");
-	ALLEGRO_BITMAP* scegli = al_load_bitmap("Livelli.png");
-	ALLEGRO_BITMAP* sfondo = al_load_bitmap("sfondo.png");
-	ALLEGRO_SAMPLE* song = al_load_sample("Song1.ogg");
-	if(!song)
-		cerr<<"no song"<<endl;
+	ALLEGRO_BITMAP* arcade = al_load_bitmap("Arcade.png");
+	ALLEGRO_BITMAP* scegli = al_load_bitmap("Levels.png");
+	ALLEGRO_BITMAP* sfondo = al_load_bitmap("Background_Init.png");
+	ALLEGRO_SAMPLE* song = al_load_sample("Song.ogg");
 	ALLEGRO_SAMPLE_INSTANCE* songInstance = al_create_sample_instance(song);
 
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
