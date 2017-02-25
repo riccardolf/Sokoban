@@ -2,6 +2,7 @@
 #include<allegro5/allegro.h>
 #include<allegro5/allegro_image.h>
 #include<allegro5/allegro_audio.h>
+#include<allegro5/allegro_acodec.h>
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
 #include"GestoreGioco.h"
@@ -33,6 +34,9 @@ int main()
 	{
 		cerr << "no mouse" << endl;
 	}
+	if(!al_install_audio() || !al_init_acodec_addon()) {
+		cerr << "no audio" << endl;
+   	}
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
 	if (!display)
 	{
@@ -54,10 +58,19 @@ int main()
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
+
+	al_reserve_samples(10);
 	
 	ALLEGRO_BITMAP* arcade = al_load_bitmap("arcade.png");
 	ALLEGRO_BITMAP* scegli = al_load_bitmap("Livelli.png");
 	ALLEGRO_BITMAP* sfondo = al_load_bitmap("sfondo.png");
+	ALLEGRO_SAMPLE* song = al_load_sample("Song1.ogg");
+	if(!song)
+		cerr<<"no song"<<endl;
+	ALLEGRO_SAMPLE_INSTANCE* songInstance = al_create_sample_instance(song);
+
+	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
 
 	GestoreGioco sokoban;
 
@@ -69,7 +82,7 @@ int main()
 	al_draw_bitmap(scegli, scegli_x, scegli_y, 0);
 	al_flip_display();
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-
+	al_play_sample_instance(songInstance);
 	while (true)
 	{
 		ALLEGRO_EVENT ev;
@@ -83,6 +96,7 @@ int main()
 			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 				break;	
 	}
+	
 	if (x >= arcade_x && x <= arcade_x + 183 && y >= arcade_y && y <= arcade_y + 85)
 	{
 		al_destroy_display(display);
@@ -150,6 +164,10 @@ int main()
 			
 	}
 
+	al_stop_sample_instance(songInstance);
+
+	al_destroy_sample(song);
+	al_destroy_sample_instance(songInstance);
 	al_destroy_bitmap(arcade);
 	al_destroy_bitmap(scegli);
 	al_destroy_bitmap(sfondo);
