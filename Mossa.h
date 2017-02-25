@@ -6,11 +6,9 @@
 class Mossa
 {
 	public:
-		Mossa(const Giocatore& g, vector<Cassa*> c, int** m)	
+		Mossa(const Giocatore& g, int** m)	
 		{	
 			player=g;
-			for(unsigned i=0; i<c.size(); i++)
-				casse.push_back(c[i]);
 			mappa=new int*[12];
 			for(int i=0; i<12; i++)
 				mappa[i]=new int[10];
@@ -18,17 +16,19 @@ class Mossa
 			for(int i=0; i<12; i++)
 				for(int j=0; j<10; j++)
 					mappa[i][j]=m[i][j];
-			cout << "dir: " << g.getDir() << endl;
 		}
-	//	~Mossa()   { delete player;	delete casse; }
+		~Mossa()   
+		{	
+			for(int i=0; i<12; i++)
+				delete[] mappa[i];
+			delete[]mappa;
+		}
 		Giocatore getPlayer() const	{return player;}
-		vector<Cassa*> getCasse() const	{return casse;}
 		int** getMappa() const {return mappa;}
 
 	private:
 		int** mappa;
 		Giocatore player;
-		vector<Cassa*> casse;
 		
 };
 #endif

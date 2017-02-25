@@ -6,8 +6,8 @@ class Cassa
 		Cassa(int xI, int yI, int xF, int yF);
 		Cassa(const Cassa& c);
 		Cassa& operator=(const Cassa& c);
-		~Cassa() { }
 		void sposta(int dir);
+		~Cassa() {}
 		int getX() const {return cassa_x;}
 		int getY() const {return cassa_y;}
 		int getEndX() const {return x_finale;}

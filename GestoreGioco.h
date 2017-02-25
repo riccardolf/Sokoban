@@ -1,13 +1,6 @@
 #ifndef GESTOREGIOCO_H
 #define GESTOREGIOCO_H
-#include<allegro5/allegro.h>
-#include<allegro5/allegro_image.h>
-#include<allegro5/allegro_audio.h>
-#include<allegro5/allegro_native_dialog.h>
-#include<allegro5/allegro_primitives.h>
 #include"Livello.h"
-#include<cstdlib>
-#include<ctime>
 #include<vector>
 using namespace std;
 
@@ -16,11 +9,9 @@ class GestoreGioco
 	public:
 		GestoreGioco();
 		~GestoreGioco();
-		void Modalita();
-		void creaLivello(int liv);
+		bool creaLivello(int liv);
 
 	private:
-		void inizializzaAllegro();
 		int numLivelli;
 		vector<Cassa*> casse;
 		vector<Muro*> muri;

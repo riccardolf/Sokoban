@@ -2,7 +2,6 @@
 
 GestoreGioco::GestoreGioco()
 {
-	this->inizializzaAllegro();
 	numLivelli = 9;
 	numCasse = new int[numLivelli + 2];
 	numMuri = new int[numLivelli + 2];
@@ -14,7 +13,7 @@ GestoreGioco::GestoreGioco()
 	posMuriY = new int*[numLivelli + 2];
 	posGiocatoreX = new int[numLivelli + 2];
 	posGiocatoreY = new int[numLivelli + 2];
-	//  1  2  3  4   5  6  7  8  9 10 11
+				//  1  2  3  4   5  6  7  8  9 10 11
 	int nCasse[] = { 2, 3, 8, 4,  4, 3, 7, 5, 4, 1, 3 };
 	int nMuri[] = { 23,39,48,37, 28,36,35,26,29,12,35 };
 	int PGx[] = { 2, 2, 5, 8,  6, 4, 4, 5, 4, 4, 2 };
@@ -313,8 +312,11 @@ GestoreGioco::~GestoreGioco()
 	delete[]numCasse;
 }
 
-void GestoreGioco::creaLivello(int liv)
+bool GestoreGioco::creaLivello(int liv)
 {
+	if(liv>11)
+		return false;
+
 	Giocatore player(posGiocatoreX[liv], posGiocatoreY[liv]); 		//  uso il costruttore di player;
 
 	for (int i = 0; i<numCasse[liv]; i++)
@@ -323,172 +325,19 @@ void GestoreGioco::creaLivello(int liv)
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Muro(posMuriX[liv][i], posMuriY[liv][i]));
 
-	Livello l(player, casse, muri);
-	l.gioca();
+	Livello L(player, casse, muri);
+	if(!L.gioca())
+		return false;		
 
 	for(int i=0; i<numMuri[liv]; i++)
 		delete muri[i];
 	for(int i=0; i<numCasse[liv]; i++)
 		delete casse[i];
-}
-
-void rimuovi(vector<int> livelli, int pos, int& num)
-{
-	for (int i = pos; i<num; i++)
-		livelli[i] = livelli[i + 1];
-	livelli.pop_back();
-	num--;
-}
-
-void GestoreGioco::Modalita()
-{
-
-	srand(time(0));
-
-	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
-	if (!display)
-	{
-		cerr << "no display" << endl;
-	}
-	const float FPS = 30;
-	ALLEGRO_TIMER* timer = al_create_timer(1 / FPS);
-	if (!timer)
-	{
-		cerr << "no timer" << endl;
-	}
-	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
-	if (!event_queue)
-	{
-		cerr << "no event_queue" << endl;
-	}
-	al_register_event_source(event_queue, al_get_display_event_source(display));
-	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	al_register_event_source(event_queue, al_get_mouse_event_source());
 	
-	ALLEGRO_BITMAP* arcade = al_load_bitmap("arcade.png");
-	ALLEGRO_BITMAP* scegli = al_load_bitmap("Livelli.png");
-	ALLEGRO_BITMAP* sfondo = al_load_bitmap("sfondo.png");
-	int arcade_x = 185, arcade_y = 250, scegli_x = 405, scegli_y = 250, x = 0, y = 0;
-
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-	al_draw_bitmap(sfondo,0,0, 0);	
-	al_draw_bitmap(arcade, arcade_x, arcade_y, 0);
-	al_draw_bitmap(scegli, scegli_x, scegli_y, 0);
-	al_flip_display();
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-
-	while (true)
-	{
-		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-			{
-				x = ev.mouse.x;
-				y = ev.mouse.y;
-				break;
-			}
-			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-				break;	
-	}
-	if (x >= arcade_x && x <= arcade_x + 183 && y >= arcade_y && y <= arcade_y + 85)
-	{
-		al_destroy_display(display);
-		int num = numLivelli;
-		vector<int> livelli;
-		for (int i = 0; i<num; i++)
-			livelli.push_back(i + 1);
-		while (num>0)
-		{
-			int liv = rand() % num;
-			creaLivello(liv);
-			rimuovi(livelli, liv, num);
-		}
-		creaLivello(9);
-		creaLivello(10);
-	}
-	else if(x>=scegli_x && x<=scegli_x+183 && y>=scegli_y && y<=scegli_y+85)	
-	{	
-			int liv_x[numLivelli]={178,326,474,178,326,474,178,326,474};
-			int liv_y[numLivelli]={100,100,100,250,250,250,400,400,400};
-			vector<ALLEGRO_BITMAP*> liv;
-			for(int i=0; i<numLivelli; i++)
-				liv.push_back(NULL);
-	
-			liv[0]=al_load_bitmap("1.png");
-			liv[1]=al_load_bitmap("2.png");
-			liv[2]=al_load_bitmap("3.png");
-			liv[3]=al_load_bitmap("4.png");
-			liv[4]=al_load_bitmap("5.png");
-			liv[5]=al_load_bitmap("6.png");
-			liv[6]=al_load_bitmap("7.png");
-			liv[7]=al_load_bitmap("8.png");
-			liv[8]=al_load_bitmap("9.png");
-			al_clear_to_color(al_map_rgb(0,0,0));
-		
-		while(true)
-		{	
-			al_draw_bitmap(sfondo,0,0, 0);	
-			for(int i=0; i<numLivelli; i++)
-				al_draw_bitmap(liv[i],liv_x[i],liv_y[i],0);
-			al_flip_display();
-
-			int x1=0, y1=0;
-			ALLEGRO_EVENT ev;
-			al_wait_for_event(event_queue, &ev);
-		
-			if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-			{
-				x1=ev.mouse.x;
-				y1=ev.mouse.y;
-			}
-			for(int i=0; i<numLivelli; i++)
-				if(x1>=liv_x[i] && x1<=liv_x[i]+128 && y1>=liv_y[i] && y1<=liv_y[i]+128)
-				{
-					al_destroy_display(display);
-					creaLivello(i);
-					break;
-				}	
-			if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-				break;	
-		}	
-			for(int i=0; i<numLivelli; i++)
-				al_destroy_bitmap(liv[i]);
-			
-	}
-
-	al_destroy_bitmap(arcade);
-	al_destroy_bitmap(scegli);
-	al_destroy_bitmap(sfondo);
-	al_destroy_timer(timer);
-	al_destroy_event_queue(event_queue);
-	
+	casse.clear();
+	muri.clear();
+	cout<<"FINE LIV"<<endl;
+	return true;
 }
 
-void GestoreGioco::inizializzaAllegro()
-{
-	if (!al_init())
-	{
-		cerr << "no allegro" << endl;
-	}
-
-	if (!al_init_image_addon())
-	{
-		cerr << "failed initialisation image" << endl;
-	}
-
-	if (!al_init_primitives_addon())
-	{
-		cerr << "failed initialisation primitives" << endl;
-	}
-
-	if (!al_init_native_dialog_addon())
-	{
-		cerr << "failed initialisation dialog" << endl;
-	}
-
-	if (!al_install_mouse())
-	{
-		cerr << "no mouse" << endl;
-	}
-}
 

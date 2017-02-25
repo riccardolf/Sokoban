@@ -3,8 +3,11 @@
 Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 {
 	this->inizializzaAllegro();
-	muri=m;
+
 	//Inizializzo il livello
+	muri=m;
+	casse=c;
+
 	mappa=new int*[12];
 	for(int i=0; i<12; i++)
 		mappa[i]=new int [10];
@@ -18,63 +21,53 @@ Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 	int y=g.getY();
 	mappa[x][y]=3;
 	
-	for(unsigned i=0; i<c.size(); i++)
+	for(unsigned i=0; i<casse.size(); i++)
 	{	
-		x=c[i]->getX();
-		y=c[i]->getY();		
+		x=casse[i]->getX();
+		y=casse[i]->getY();		
 		mappa[x][y]=2;
 	}
 	
-	for(unsigned i=0; i<m.size(); i++)
+	for(unsigned i=0; i<muri.size(); i++)
 	{
-		x=m[i]->getX();
-		y=m[i]->getY();
+		x=muri[i]->getX();
+		y=muri[i]->getY();
 		mappa[x][y]=1;
 	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-			cout << mappa[j][i] << " ";
-		cout << endl;
-	}
+	mosse.push(new Mossa(g, mappa));		// mossa 0		come inizia il livello
+}
 
-	mosse.push(new 	Mossa(g, c, mappa));		// mossa 0		come inizia il livello
-
-	Wall = al_load_bitmap("wall.png");
-	Undo = al_load_bitmap("Indietro.png");
-	Rigioca = al_load_bitmap("Ripeti.png");
-	Box= al_load_bitmap("box.png");
-	BoxColor = al_load_bitmap("boxColor.png");
-	Player = al_load_bitmap("George.png");
-	sfondo = al_load_bitmap("Background.jpg");
+Livello::~Livello()
+{
+	for(int i=0; i<12; i++)
+		delete[] mappa[i];
+	delete[]mappa;
 }
 	
-bool clear(stack<Mossa*> mosse)
+bool Livello::clear(stack<Mossa*>& mosse, unsigned dim)
 {		
-	if(mosse.size()<2)
+	if(dim<2)
 		return false;
 	
-	while(mosse.size()>1)
+	while(dim>1)
 	{
-		Mossa* m=mosse.top();
 		mosse.pop();
-		delete m;
+		dim--;
 	}
 
 	return true;
 
 }
 
-const int undo_x = 512, undo_y = 0, rigioca_x = 576, rigioca_y = 0;
+const int undo_x = 570, undo_y = 0;//, rigioca_x = 576, rigioca_y = 0;
 void Livello::drawMap(int dir) const
 {
 	al_clear_to_color(al_map_rgb(0,0,0));
 	al_draw_bitmap(sfondo, 0, 0, 0);
 	al_draw_bitmap(Undo, undo_x, undo_y, 0);
-	al_draw_bitmap(Rigioca, rigioca_x, rigioca_y, 0);
+	//al_draw_bitmap(Rigioca, rigioca_x, rigioca_y, 0);
 
-	vector<Cassa*> casse=mosse.top()->getCasse();
 	for(unsigned i=0; i<casse.size(); i++)
 		al_draw_filled_circle(casse[i]->getEndX()*64+32,casse[i]->getEndY()*64+32, 8, al_map_rgb(255,0,0));	
 	
@@ -88,6 +81,7 @@ void Livello::drawMap(int dir) const
 			else if(mappa[i][j]==3)
 				al_draw_bitmap_region(Player, dir * 64, 0, 64, 64, i * 64, j * 64, 0);
 		}
+	
 	for (unsigned i = 0; i < casse.size(); i++)
 	 {
 		int x = casse[i]->getEndX();
@@ -99,11 +93,10 @@ void Livello::drawMap(int dir) const
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 }
 
-void Livello::gioca()
+bool Livello::gioca()
 {
 	//Posizioni iniziali del livello
 	Giocatore player=mosse.top()->getPlayer();
-	vector<Cassa*> casse=mosse.top()->getCasse();	
 	enum DIR {DOWN = 0, LEFT,UP, RIGHT};  
 	int dir=0;
 	ALLEGRO_KEYBOARD_STATE keystate;
@@ -122,7 +115,21 @@ void Livello::gioca()
 		al_get_keyboard_state(&keystate);
 
 		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			break;
+		{
+			clear(mosse, mosse.size());
+			mosse.pop();
+			al_destroy_bitmap(Undo);
+		//	al_destroy_bitmap(Rigioca);
+			al_destroy_bitmap(sfondo);
+			al_destroy_bitmap(Box);
+			al_destroy_bitmap(BoxColor);
+			al_destroy_bitmap(Wall);
+			al_destroy_bitmap(Player);
+			al_destroy_timer(timer);
+			al_destroy_event_queue(event_queue);
+			al_destroy_display(display);
+			return false;
+		}			
       
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
@@ -244,7 +251,7 @@ void Livello::gioca()
 
 				drawMap(dir);
 				//Inserimento ultima mossa fatta
-				mosse.push(new Mossa(player, casse, mappa));
+				mosse.push(new Mossa(player, mappa));
 			}
 		}
 
@@ -255,20 +262,23 @@ void Livello::gioca()
 			a=events.mouse.x;
 			b=events.mouse.y;
 			
-			if(a>=rigioca_x && a<=rigioca_x+64 && b>=rigioca_y && b<=rigioca_y+64)
+			/*if(a>=rigioca_x && a<=rigioca_x+64 && b>=rigioca_y && b<=rigioca_y+64)
 			{
-				clear(mosse);
-				casse=mosse.top()->getCasse();			
-				player=mosse.top()->getPlayer();
-				mappa=mosse.top()->getMappa();
-				drawMap(dir);
-			}
+				cout<<"prima: "<<mosse.size()<<endl;
+				clear(mosse,mosse.size());
+				mappa=mossaIniziale->getMappa();
+				player=mossaIniziale->getPlayer();
+				drawMap(0);
+	
+				for(int i=0; i<12; i++)
+				{	for(int j=0; j<10; j++)
+						cout<<mappa[i][j]<<" ";
+					cout<<endl;}				
+			}*/
 		
 			if(a>=undo_x && a<=undo_x+64 && b>=undo_y && b<=undo_y+64 && mosse.size()>1)
 			{
-				mosse.pop();
-				casse.clear();				
-				casse=mosse.top()->getCasse();
+				mosse.pop();				
 				player=mosse.top()->getPlayer();
 				mappa=mosse.top()->getMappa();
 					
@@ -279,13 +289,20 @@ void Livello::gioca()
 		//Controllo fine livello
 		if(Done(casse))
 		{
-			clear(mosse);
+			clear(mosse, mosse.size());
 			mosse.pop();
-		//	delete muri;
+			al_destroy_bitmap(Undo);
+			//al_destroy_bitmap(Rigioca);
+			al_destroy_bitmap(sfondo);
+			al_destroy_bitmap(Box);
+			al_destroy_bitmap(BoxColor);
+			al_destroy_bitmap(Wall);
+			al_destroy_bitmap(Player);
 			al_destroy_timer(timer);
 			al_destroy_event_queue(event_queue);
 			al_destroy_display(display);
-			return;
+			
+			return true;
 		}
 	}
 
@@ -357,5 +374,13 @@ void Livello::inizializzaAllegro()
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
-	al_register_event_source(event_queue, al_get_mouse_event_source());		
+	al_register_event_source(event_queue, al_get_mouse_event_source());	
+
+	Wall = al_load_bitmap("wall.png");
+	Undo = al_load_bitmap("Indietro.png");
+	//Rigioca = al_load_bitmap("Ripeti.png");
+	Box= al_load_bitmap("box.png");
+	BoxColor = al_load_bitmap("boxColor.png");
+	Player = al_load_bitmap("George.png");
+	sfondo = al_load_bitmap("Background.jpg");	
 }

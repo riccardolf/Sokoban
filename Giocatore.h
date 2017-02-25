@@ -6,10 +6,8 @@ using namespace std;
 class Giocatore
 {
 	public:
-		Giocatore(int x, int y);
+		Giocatore(int x=0, int y=0);
 		Giocatore(const Giocatore& g);
-		Giocatore() {}		
-		~Giocatore() {}
 		Giocatore& operator=(const Giocatore &g);
 		void MovePlayer(int dir);
 		int getX() const {return player_x;}
