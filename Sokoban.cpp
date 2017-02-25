@@ -11,50 +11,33 @@ using namespace std;
 int main()
 {
 	if (!al_init())
-	{
 		cerr << "no allegro" << endl;
-	}
-
 	if (!al_init_image_addon())
-	{
 		cerr << "failed initialisation image" << endl;
-	}
-
 	if (!al_init_primitives_addon())
-	{
 		cerr << "failed initialisation primitives" << endl;
-	}
-
 	if (!al_init_native_dialog_addon())
-	{
 		cerr << "failed initialisation dialog" << endl;
-	}
-
 	if (!al_install_mouse())
-	{
 		cerr << "no mouse" << endl;
-	}
-	if(!al_install_audio() || !al_init_acodec_addon()) {
+	if(!al_install_audio() || !al_init_acodec_addon())
 		cerr << "no audio" << endl;
-   	}
+
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
 	if (!display)
-	{
 		cerr << "no display" << endl;
-	}
+
 	al_set_window_title(display,"Sokoban");
 	
 	const float FPS = 30;
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
 	if (!timer)
-	{
 		cerr << "no timer" << endl;
-	}
+
 	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
 	if (!event_queue)
-	{
 		cerr << "no event_queue" << endl;
-	}
+
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
@@ -66,6 +49,15 @@ int main()
 	ALLEGRO_BITMAP* sfondo = al_load_bitmap("Background_Init.png");
 	ALLEGRO_SAMPLE* song = al_load_sample("Song.ogg");
 	ALLEGRO_SAMPLE_INSTANCE* songInstance = al_create_sample_instance(song);
+
+	if (!arcade)
+		cerr << "No Arcade.png" << endl;
+	if (!scegli)
+		cerr << "No Levels.png" << endl;
+	if (!sfondo)
+		cerr << "Background_Init.png" << endl;
+	if (!song)
+		cerr << "Song.ogg" << endl;
 
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());

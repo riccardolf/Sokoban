@@ -323,55 +323,38 @@ bool Livello::Done(vector<Cassa*> casse) const
 void Livello::inizializzaAllegro()
 {
 	if(!al_init())
-	{
 		cerr<<"no allegro"<<endl;
-	}
 
 	if(!al_init_image_addon())
-	{ 
 	  cerr<<"failed initialisation image"<<endl;
-	}
 	
 	if(!al_init_primitives_addon())
-	{ 
 	  cerr<<"failed initialisation primitives"<<endl;
-	}
 
 	if(!al_init_native_dialog_addon())
-	{ 
 	  cerr<<"failed initialisation dialog"<<endl;
-	}
 
-	if(!al_install_keyboard())
-	{
-		cerr<<"no keyboard"<<endl;
-	}
+	if (!al_install_keyboard())
+		cerr << "no keyboard" << endl;
 	
 	if(!al_install_mouse())
-	{
-		cerr<<"no mouse"<<endl;
-	}		
+		cerr<<"no mouse"<<endl;	
 	
 	display=al_create_display(800,700);
 
 	if(!display)
-	{
 		cerr<<"no display"<<endl;
-	}
 	al_set_window_title(display,"Sokoban");
 
 	const float FPS=12;
 	timer=al_create_timer(1/FPS);
 	if(!timer)
-	{
 		cerr<<"no timer"<<endl;
-	}
 
 	event_queue=al_create_event_queue();
 	if(!event_queue)
-	{
 		cerr<<"no event_queue"<<endl;
-	}
+
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
@@ -384,4 +367,17 @@ void Livello::inizializzaAllegro()
 	BoxColor = al_load_bitmap("boxColor.png");
 	Player = al_load_bitmap("George.png");
 	sfondo = al_load_bitmap("Background.jpg");
+
+	if (!Wall)
+		cerr << "No wall.png" << endl;
+	if (!Undo)
+		cerr << "No Indietro.png" << endl;
+	if (!Box)
+		cerr << "No box.png" << endl;
+	if (!BoxColor)
+		cerr << "No boxColor.png" << endl;
+	if (!Player)
+		cerr << "No George.png" << endl;
+	if (!sfondo)
+		cerr << "No Background.jpg" << endl;
 }
