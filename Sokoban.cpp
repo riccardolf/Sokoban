@@ -105,7 +105,14 @@ int main()
 	{
 		for(int i=0; i<9; i++)
 			if(!sokoban.creaLivello(i))
+			{
+				al_stop_sample_instance(songInstance);
+				al_destroy_sample(song);
+				al_destroy_sample_instance(songInstance);
+				al_destroy_bitmap(Sfondo);
+				al_destroy_event_queue(event_queue);	
 				return 0;
+			}
 		int risp= al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "Hai completato il gioco!", "Solo per te un livello bouns difficilissimo. Vuoi giocare? ",0,ALLEGRO_MESSAGEBOX_YES_NO);
 		if(risp==1)
 		{
