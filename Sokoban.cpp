@@ -90,15 +90,26 @@ int main()
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-		if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 		{
-			x=ev.mouse.x;
-			y=ev.mouse.y;
+			x = ev.mouse.x;
+			y = ev.mouse.y;
 		}
-		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			break;
+		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+			x = quit_x;
+			y = quit_y;
+		}
+	}	
 
-	}			
+	if (x >= quit_x && x <= quit_x + 183 && y >= quit_y && y <= quit_y + 85) {
+		al_stop_sample_instance(songInstance);
+		al_destroy_sample(song);
+		al_destroy_sample_instance(songInstance);
+		al_destroy_bitmap(Sfondo);
+		al_destroy_event_queue(event_queue);
+		al_destroy_display(display);
+		return 0;
+	}
 
 	int PGx[] = { 40,295,580 };
 	int PGy = 310;
@@ -122,6 +133,11 @@ int main()
 			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			{
 				al_destroy_bitmap(Select);
+				al_stop_sample_instance(songInstance);
+				al_destroy_sample(song);
+				al_destroy_sample_instance(songInstance);
+				al_destroy_bitmap(Sfondo);
+				al_destroy_event_queue(event_queue);
 				return 0;
 			}
 		}
@@ -146,13 +162,10 @@ int main()
 		if(risp==1)
 		{
 			sokoban.creaLivello(9, indice);
+			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI DI NUOVO", " Passiamo al vero livello", "", 0, ALLEGRO_MESSAGEBOX_WARN);
 			sokoban.creaLivello(10, indice);
 		}
-
-		else if(risp==2)
-			al_show_native_message_box(al_get_current_display(), "", "Grazie per aver giocato!", "",0,ALLEGRO_MESSAGEBOX_WARN);
-
-		
+			
 	}
 	al_stop_sample_instance(songInstance);
 	al_destroy_sample(song);
