@@ -1,5 +1,5 @@
 #include"Livello.h"
-bool keys[4] = { false, false, false, false };
+
 Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m, ALLEGRO_BITMAP* PG, ALLEGRO_BITMAP* B, ALLEGRO_BITMAP* C)
 {
 	this->inizializzaAllegro();
@@ -115,6 +115,7 @@ void Livello::destroy()
 bool Livello::gioca()
 {
 	enum DIR {DOWN = 0, LEFT,UP, RIGHT};  
+	bool keys[4] = { false, false, false, false };
 	int x = 0, y = 0, dir = 0;
 	
 	//Posizioni iniziali del livello
@@ -322,9 +323,9 @@ bool Livello::gioca()
 		//Controllo fine livello
 		if(Done(casse))
 		{
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++)
 				keys[i] = false;
-			}
+
 			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "LIVELLO SUPERATO!", "",0,ALLEGRO_MESSAGEBOX_WARN);
 			destroy();
 			return true;
@@ -387,7 +388,7 @@ void Livello::inizializzaAllegro()
 	}
 	al_set_window_title(display,"Sokoban");
 
-	const float FPS=10;
+	const float FPS=12;
 	timer=al_create_timer(1/FPS);
 	if(!timer)
 	{
@@ -404,9 +405,6 @@ void Livello::inizializzaAllegro()
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());	
 
-	Player=NULL;
-	Box=NULL;
-	BoxColor=NULL;
 	Wall = al_load_bitmap("wall.png");
 	Undo = al_load_bitmap("Indietro.png");
 	sfondo = al_load_bitmap("Background.jpg");	

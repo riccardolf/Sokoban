@@ -6,7 +6,7 @@
 #include<allegro5/allegro_primitives.h>
 #include"GestoreGioco.h"
 
-int main()
+int main(int argc, char **argv)
 {
 	// Inizializzazione oggetti di Allegro
 	if (!al_init())
