@@ -118,9 +118,9 @@ int main()
 	al_flip_display();
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
-	//Creazione livelli
 	if (x >= play_x && x <= play_x + 183 && y >= play_y && y <= play_y + 85)
 	{
+		//Scelta Personaggio
 		while (x < PGx[0] || x > PGx[2] + 100 || (x > PGx[0] + 100 && x<PGx[1]) || (x > PGx[1] + 100 && x<PGx[2]) || y < PGy || y > PGy + 120)
 		{
 			ALLEGRO_EVENT ev;
@@ -148,6 +148,7 @@ int main()
 		al_destroy_bitmap(Select);
 		al_destroy_display(display);
 
+		//Creazione Livelli
 		for(int i=0; i<9; i++)
 			if(!sokoban.creaLivello(i,indice))
 			{
