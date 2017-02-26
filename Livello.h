@@ -12,6 +12,9 @@
 #include"Muro.h" 
 #include"Cassa.h"
 
+#include <iostream>
+using namespace std;
+
 class Livello
 {
 	public:
@@ -21,12 +24,18 @@ class Livello
 		void drawMap(int dir) const;
 		bool Done(vector<Cassa*> casse) const;
 		bool clear(stack<Mossa*>& mosse, unsigned dim);
+		void destroy();
+
 	private:	
 		int** mappa;
 		stack<Mossa*> mosse;
 		vector<Muro*> muri;
 		vector<Cassa*> casse;
+		vector<ALLEGRO_BITMAP*> PG;
+		vector<ALLEGRO_BITMAP*> boxes;
+		vector<ALLEGRO_BITMAP*> Cbox;
 		void inizializzaAllegro();
+		int dir;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;
@@ -36,5 +45,6 @@ class Livello
 		ALLEGRO_BITMAP* Player;
 		ALLEGRO_BITMAP* Wall;
 		ALLEGRO_BITMAP* sfondo;
+
 };
 #endif

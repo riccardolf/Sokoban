@@ -29,8 +29,10 @@ Giocatore& Giocatore::operator=(const Giocatore &g)
 	return *this;
 }
 
+//Movimenti del player
 void Giocatore::MovePlayer(int dir)
 {
+	//DOWN = 0, LEFT=1,UP=2, RIGHT=3
 	if(dir==2)
 		player_y--;
 	if(dir==0)

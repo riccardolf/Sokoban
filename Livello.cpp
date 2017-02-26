@@ -7,7 +7,8 @@ Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 	//Inizializzo il livello
 	muri=m;
 	casse=c;
-
+	dir = 0;
+	
 	mappa=new int*[12];
 	for(int i=0; i<12; i++)
 		mappa[i]=new int [10];
@@ -26,7 +27,7 @@ Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 		x=casse[i]->getX();
 		y=casse[i]->getY();		
 		mappa[x][y]=2;
-	}
+		}
 	
 	for(unsigned i=0; i<muri.size(); i++)
 	{
@@ -35,8 +36,9 @@ Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m)
 		mappa[x][y]=1;
 	}
 
-	mosse.push(new Mossa(g, mappa));		// mossa 0		come inizia il livello
+	mosse.push(new Mossa(g, mappa));		// mossa: 0		Come inizia il livello
 }
+
 
 Livello::~Livello()
 {
@@ -46,22 +48,23 @@ Livello::~Livello()
 		delete[] mappa[i];
 	delete[]mappa;
 }
-	
+
+//Distruzioni mosse dallo stack
 bool Livello::clear(stack<Mossa*>& mosse, unsigned dim)
 {		
-	if(dim<2)
+	if(dim<1)
 		return false;
 	
-	while(dim>1)
+	while(dim>0)
 	{
 		mosse.pop();
 		dim--;
 	}
 
 	return true;
-
 }
 
+//Disegno della mappa
 const int undo_x = 720, undo_y = 0;
 void Livello::drawMap(int dir) const
 {
@@ -70,7 +73,7 @@ void Livello::drawMap(int dir) const
 	al_draw_bitmap(Undo, undo_x, undo_y, 0);
 
 	for(unsigned i=0; i<casse.size(); i++)
-		al_draw_filled_circle(casse[i]->getEndX()*64+42,casse[i]->getEndY()*64+32, 8, al_map_rgb(255,0,0));	
+		al_draw_filled_circle(casse[i]->getEndX()*64+42,casse[i]->getEndY()*64+32, 6.5, al_map_rgb(255,0,0));	
 	
 	for(unsigned i=0; i<12; i++)
 		for(unsigned j=0; j<10; j++)
@@ -80,7 +83,7 @@ void Livello::drawMap(int dir) const
 			else if(mappa[i][j]==2)
 				al_draw_bitmap(Box, i*64 +10, j * 64, 0);
 			else if(mappa[i][j]==3)
-				al_draw_bitmap_region(Player, dir * 64, 0, 64, 64, i*64 + 10, j*64, 0);
+				al_draw_bitmap_region(Player, dir * 64, 0, 64, 64, i*64 +10, j*64, 0);
 		}
 	
 	for (unsigned i = 0; i < casse.size(); i++)
@@ -94,21 +97,77 @@ void Livello::drawMap(int dir) const
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 }
 
+//Distruttore oggetti Allegro
+void Livello::destroy()
+{
+	for(int i=0; i<PG.size(); i++)
+	{
+		al_destroy_bitmap(PG[i]);
+		al_destroy_bitmap(boxes[i]);
+		al_destroy_bitmap(Cbox[i]);
+	}
+	PG.clear();
+	boxes.clear();
+	Cbox.clear();
+
+	clear(mosse, mosse.size());
+	al_destroy_bitmap(Undo);
+	al_destroy_bitmap(sfondo);
+	al_destroy_bitmap(Wall);
+	al_destroy_timer(timer);
+	al_destroy_event_queue(event_queue);
+	al_destroy_display(display);
+}
+
+
 bool Livello::gioca()
 {
-	//Posizioni iniziali del livello
-	Giocatore player=mosse.top()->getPlayer();
 	enum DIR {DOWN = 0, LEFT,UP, RIGHT};  
-	int dir=0;
+	int x=0, y=0, PGy=310;
 	ALLEGRO_KEYBOARD_STATE keystate;
 	
+	// Scelta personaggio
+	int PGx[]={40,295,580};
+	ALLEGRO_BITMAP* Select = al_load_bitmap("Select.jpg");
+	al_draw_bitmap(Select,0,0,0);
+	al_flip_display();
+	al_clear_to_color(al_map_rgb(0,0,0));
+
+	while(x < PGx[0] || x > PGx[2]+100 || (x > PGx[0]+100 && x<PGx[1]) || (x > PGx[1]+100 && x<PGx[2]) ||y < PGy || y > PGy+120 )
+	{	
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		{
+			x=ev.mouse.x;
+			y=ev.mouse.y;
+		}
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			al_destroy_bitmap(Select);
+			destroy();
+			return false;
+		}
+	}	
+
+	for(unsigned i=0; i<PG.size(); i++)
+		if(x >= PGx[i] && x <= PGx[i]+100 && y >= PGy && y <= PGy+120)
+		{	
+			Player = PG[i];
+			Box = boxes[i];
+			BoxColor = Cbox[i];
+			break;			
+		}
+
+	//Posizioni iniziali del livello
+	Giocatore player=mosse.top()->getPlayer();
+	
 	bool draw=false;
-	
 	drawMap(dir);
-	al_flush_event_queue(event_queue);
 	
-	//inizio timer e game loop
+	//Inizio timer e game loop
 	al_start_timer(timer);
+
 	while (true) 
 	{	
 		ALLEGRO_EVENT events;
@@ -117,17 +176,8 @@ bool Livello::gioca()
 
 		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
-			clear(mosse, mosse.size());
-			mosse.pop();
-			al_destroy_bitmap(Undo);
-			al_destroy_bitmap(sfondo);
-			al_destroy_bitmap(Box);
-			al_destroy_bitmap(BoxColor);
-			al_destroy_bitmap(Wall);
-			al_destroy_bitmap(Player);
-			al_destroy_timer(timer);
-			al_destroy_event_queue(event_queue);
-			al_destroy_display(display);
+			al_destroy_bitmap(Select);
+			destroy();
 			return false;
 		}			
       
@@ -244,7 +294,7 @@ bool Livello::gioca()
 				}
 			}
 
-			//redraw della mappa
+			//Disegno della mappa
 			if(draw && al_is_event_queue_empty(event_queue))
 			{
 				draw=false;
@@ -271,30 +321,22 @@ bool Livello::gioca()
 					
 				drawMap(dir);
 			}
+			
 		}
 
 		//Controllo fine livello
 		if(Done(casse))
 		{
 			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "LIVELLO SUPERATO!", "",0,ALLEGRO_MESSAGEBOX_WARN);
-			clear(mosse, mosse.size());
-			mosse.pop();
-			al_destroy_bitmap(Undo);
-			al_destroy_bitmap(sfondo);
-			al_destroy_bitmap(Box);
-			al_destroy_bitmap(BoxColor);
-			al_destroy_bitmap(Wall);
-			al_destroy_bitmap(Player);
-			al_destroy_timer(timer);
-			al_destroy_event_queue(event_queue);
-			al_destroy_display(display);
-			
+			al_destroy_bitmap(Select);
+			destroy();
 			return true;
 		}
 	}
 
 }
 
+//Controllo superamento livello
 bool Livello::Done(vector<Cassa*> casse) const
 {
 	for (unsigned i = 0; i < casse.size(); i++)
@@ -307,6 +349,7 @@ bool Livello::Done(vector<Cassa*> casse) const
 	return true;
 }
 
+//Inizializzazione oggetti Allegro
 void Livello::inizializzaAllegro()
 {
 	if(!al_init())
@@ -347,7 +390,7 @@ void Livello::inizializzaAllegro()
 	}
 	al_set_window_title(display,"Sokoban");
 
-	const float FPS = 20;
+	const float FPS=10;
 	timer=al_create_timer(1/FPS);
 	if(!timer)
 	{
@@ -364,10 +407,35 @@ void Livello::inizializzaAllegro()
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());	
 
+	//	Caricamento bitmap dei personaggi
+	PG.push_back(al_load_bitmap("George.png"));
+	PG.push_back(al_load_bitmap("Death.png"));
+	PG.push_back(al_load_bitmap("Walter.png"));
+	for(unsigned i=0; i<PG.size(); i++)
+		if(!PG[i])
+			cerr<<"No PG bitmap"<<endl;
+
+	//	Caricamento bitmap delle casse
+	boxes.push_back(al_load_bitmap("box.png"));
+	boxes.push_back(al_load_bitmap("Soul.png"));
+	boxes.push_back(al_load_bitmap("EmptyFlask.png"));
+	for(unsigned i=0; i<boxes.size(); i++)
+		if(!boxes[i])
+			cerr<<"No boxes bitmap"<<endl;
+
+	//	Caricamento bitmap delle casse colorate
+	Cbox.push_back(al_load_bitmap("boxColor.png"));
+	Cbox.push_back(al_load_bitmap("DeadSoul.png"));
+	Cbox.push_back(al_load_bitmap("FullFlask.png"));
+	for(unsigned i=0; i<Cbox.size(); i++)
+		if(!Cbox[i])
+			cerr<<"No Cbox bitmap"<<endl;
+
+
+	Player=NULL;
+	Box=NULL;
+	BoxColor=NULL;
 	Wall = al_load_bitmap("wall.png");
 	Undo = al_load_bitmap("Indietro.png");
-	Box= al_load_bitmap("box.png");
-	BoxColor = al_load_bitmap("boxColor.png");
-	Player = al_load_bitmap("George.png");
 	sfondo = al_load_bitmap("Background.jpg");	
 }

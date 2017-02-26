@@ -1,7 +1,5 @@
 #ifndef GIOCATORE_H
 #define GIOCATORE_H
-#include<iostream>
-using namespace std;
 
 class Giocatore
 {

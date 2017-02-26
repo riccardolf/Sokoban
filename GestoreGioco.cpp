@@ -13,6 +13,7 @@ GestoreGioco::GestoreGioco()
 	posMuriY = new int*[numLivelli + 2];
 	posGiocatoreX = new int[numLivelli + 2];
 	posGiocatoreY = new int[numLivelli + 2];
+
 			 	 //  1  2  3  4  5  6  7  8  9 10 11
 	int nCasse[] = { 2, 3, 8, 4, 4, 3, 7, 5, 4, 1, 3 };
 	int nMuri[] =  {23,39,48,37,28,36,35,26,29,12,35 };
@@ -33,7 +34,7 @@ GestoreGioco::GestoreGioco()
 		posMuriY[i] = new int[numMuri[i]];
 	}
 
-	//livello 1
+	//Livello 1
 	int CasseXi[] = { 3,4 };
 	int CasseYi[] = { 4,4 };
 	int CasseXf[] = { 4,5 };
@@ -55,7 +56,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[0][i] = MuriX[i];
 	}
 
-	// livello 2
+	// Livello 2
 	int CasseXi2[] = { 3,3,4 };
 	int CasseYi2[] = { 7,6,7 };
 	int CasseXf2[] = { 8,8,8 };
@@ -78,7 +79,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[1][i] = MuriX2[i];
 	}
 
-	//livello 3
+	//Livello 3
 	int CasseXi3[] = { 2,9,3,4,5,6,7,8 };
 	int CasseYi3[] = { 2,2,7,7,7,7,7,7 };
 	int CasseXf3[] = { 2,4,5,6,7,9,1,10};
@@ -102,7 +103,7 @@ GestoreGioco::GestoreGioco()
 	}
 
 
-	//livello 4 
+	//Livello 4 
 	int CasseXi4[] = { 2,3,8,9 };
 	int CasseYi4[] = { 5,4,5,4 };
 	int CasseXf4[] = { 4,5,6,7 };
@@ -125,7 +126,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[3][i] = MuriX4[i];
 	}
 
-	//livello 5
+	//Livello 5
 	int CasseXi5[] = { 5,5,6,7 };
 	int CasseYi5[] = { 4,5,6,4 };
 	int CasseXf5[] = { 3,5,6,8 };
@@ -148,7 +149,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[4][i] = MuriX5[i];
 	}
 
-	//livello 6
+	//Livello 6
 	int CasseXi6[] = { 3,4,6 };
 	int CasseYi6[] = { 3,5,4 };
 	int CasseXf6[] = { 5,6,7 };
@@ -171,7 +172,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[5][i] = MuriX6[i];
 	}
 
-	//livello 7
+	//Livello 7
 	int CasseXi7[] = { 3,5,6,7,6,6,5 };
 	int CasseYi7[] = { 7,7,7,7,5,4,3 };
 	int CasseXf7[] = { 3,3,5,6,8,6,7 };
@@ -194,7 +195,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[6][i] = MuriX7[i];
 	}
 
-	//livello 8
+	//Livello 8
 	int CasseXi8[] = { 6,5,6,5,6 };
 	int CasseYi8[] = { 3,4,5,6,7 };
 	int CasseXf8[] = { 4,4,5,6,7 };
@@ -217,7 +218,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[7][i] = MuriX8[i];
 	}
 
-	//livello 9
+	//Livello 9
 	int CasseXi9[] = { 6,5,6,7 };
 	int CasseYi9[] = { 4,5,6,6 };
 	int CasseXf9[] = { 5,6,6,7 };
@@ -240,7 +241,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[8][i] = MuriX9[i];
 	}
 
-	//livello 10
+	//Livello 10
 	int CasseXi10[] = { 5 };
 	int CasseYi10[] = { 5 };
 	int CasseXf10[] = { 6 };
@@ -263,7 +264,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[9][i] = MuriX10[i];
 	}
 
-	//livello 11
+	//Livello 11
 	int CasseXi11[] = { 4,4,4 };
 	int CasseYi11[] = { 4,5,6, };
 	int CasseXf11[] = { 5,5,5 };
@@ -287,9 +288,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 }
+
+
 GestoreGioco::~GestoreGioco()
 {
-
 	for (int i = 0; i<numLivelli; i++)
 	{
 		delete[]posMuriX[i];
@@ -312,6 +314,7 @@ GestoreGioco::~GestoreGioco()
 	delete[]numCasse;
 }
 
+//Creazione livelli
 bool GestoreGioco::creaLivello(int liv)
 {
 	if(liv>11)
@@ -324,20 +327,14 @@ bool GestoreGioco::creaLivello(int liv)
 
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Muro(posMuriX[liv][i], posMuriY[liv][i]));
-
+	
 	Livello L(player, casse, muri);
 	bool done=L.gioca();
-
-	for(int i=0; i<numMuri[liv]; i++)
-		delete muri[i];
-	for(int i=0; i<numCasse[liv]; i++)
-		delete casse[i];
 
 	casse.clear();
 	muri.clear();
 
 	return done;
-
 }
 
 

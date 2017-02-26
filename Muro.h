@@ -17,6 +17,7 @@ class Muro
 		
 			return *this;
 		}
+
 		int getX() const {return muro_x;}
 		int getY() const {return muro_y;}		
 
