@@ -100,13 +100,40 @@ int main()
 
 	}			
 
-	al_destroy_display(display);
+	int PGx[] = { 40,295,580 };
+	int PGy = 310;
+	ALLEGRO_BITMAP* Select = al_load_bitmap("Select.jpg");
+	al_draw_bitmap(Select, 0, 0, 0);
+	al_flip_display();
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 
 	//Creazione livelli
 	if (x >= play_x && x <= play_x + 183 && y >= play_y && y <= play_y + 85)
 	{
+		while (x < PGx[0] || x > PGx[2] + 100 || (x > PGx[0] + 100 && x<PGx[1]) || (x > PGx[1] + 100 && x<PGx[2]) || y < PGy || y > PGy + 120)
+		{
+			ALLEGRO_EVENT ev;
+			al_wait_for_event(event_queue, &ev);
+			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+			{
+				x = ev.mouse.x;
+				y = ev.mouse.y;
+			}
+			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			{
+				al_destroy_bitmap(Select);
+				return 0;
+			}
+		}
+		int indice = 0;
+		for (unsigned i = 0; i < 3; i++)
+			if (x >= PGx[i] && x <= PGx[i] + 100 && y >= PGy && y <= PGy + 120)
+				indice = i;
+		al_destroy_bitmap(Select);
+		al_destroy_display(display);
+
 		for(int i=0; i<9; i++)
-			if(!sokoban.creaLivello(i))
+			if(!sokoban.creaLivello(i,indice))
 			{
 				al_stop_sample_instance(songInstance);
 				al_destroy_sample(song);
@@ -118,8 +145,8 @@ int main()
 		int risp= al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "Hai completato il gioco!", "Solo per te un livello bouns difficilissimo. Vuoi giocare? ",0,ALLEGRO_MESSAGEBOX_YES_NO);
 		if(risp==1)
 		{
-			sokoban.creaLivello(9);
-			sokoban.creaLivello(10);
+			sokoban.creaLivello(9, indice);
+			sokoban.creaLivello(10, indice);
 		}
 
 		else if(risp==2)
@@ -131,6 +158,6 @@ int main()
 	al_destroy_sample(song);
 	al_destroy_sample_instance(songInstance);
 	al_destroy_bitmap(Sfondo);
-	al_destroy_event_queue(event_queue);	
+	al_destroy_event_queue(event_queue);
 	return 0;
 }

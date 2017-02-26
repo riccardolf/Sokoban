@@ -18,7 +18,7 @@ using namespace std;
 class Livello
 {
 	public:
-		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m);
+		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m, ALLEGRO_BITMAP* PG, ALLEGRO_BITMAP* B, ALLEGRO_BITMAP* C);
 		~Livello();
 		bool gioca();
 		void drawMap(int dir) const;
@@ -31,11 +31,7 @@ class Livello
 		stack<Mossa*> mosse;
 		vector<Muro*> muri;
 		vector<Cassa*> casse;
-		vector<ALLEGRO_BITMAP*> PG;
-		vector<ALLEGRO_BITMAP*> boxes;
-		vector<ALLEGRO_BITMAP*> Cbox;
 		void inizializzaAllegro();
-		int dir;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;

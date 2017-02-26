@@ -2,6 +2,33 @@
 
 GestoreGioco::GestoreGioco()
 {
+	if (!al_init())
+		cerr << "No Allegro" << endl;
+	
+	//	Caricamento bitmap dei personaggi
+	PG.push_back(al_load_bitmap("George.png"));
+	PG.push_back(al_load_bitmap("Death.png"));
+	PG.push_back(al_load_bitmap("Walter.png"));
+	for (unsigned i = 0; i<PG.size(); i++)
+		if (!PG[i])
+			cerr << "No PG bitmap" << endl;
+
+	//	Caricamento bitmap delle casse
+	boxes.push_back(al_load_bitmap("box.png"));
+	boxes.push_back(al_load_bitmap("Soul.png"));
+	boxes.push_back(al_load_bitmap("EmptyFlask.png"));
+	for (unsigned i = 0; i<boxes.size(); i++)
+		if (!boxes[i])
+			cerr << "No boxes bitmap" << endl;
+
+	//	Caricamento bitmap delle casse colorate
+	Cbox.push_back(al_load_bitmap("boxColor.png"));
+	Cbox.push_back(al_load_bitmap("DeadSoul.png"));
+	Cbox.push_back(al_load_bitmap("FullFlask.png"));
+	for (unsigned i = 0; i<Cbox.size(); i++)
+		if (!Cbox[i])
+			cerr << "No Cbox bitmap" << endl;
+
 	numLivelli = 9;
 	numCasse = new int[numLivelli + 2];
 	numMuri = new int[numLivelli + 2];
@@ -315,7 +342,7 @@ GestoreGioco::~GestoreGioco()
 }
 
 //Creazione livelli
-bool GestoreGioco::creaLivello(int liv)
+bool GestoreGioco::creaLivello(int liv, int indice)
 {
 	if(liv>11)
 		return false;
@@ -328,7 +355,7 @@ bool GestoreGioco::creaLivello(int liv)
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Muro(posMuriX[liv][i], posMuriY[liv][i]));
 	
-	Livello L(player, casse, muri);
+	Livello L(player, casse, muri, PG[indice], boxes[indice], Cbox[indice]);
 	bool done=L.gioca();
 
 	casse.clear();
