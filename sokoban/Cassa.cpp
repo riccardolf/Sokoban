@@ -29,6 +29,7 @@ Cassa& Cassa::operator=(const Cassa& c)
 	return *this;
 }
 
+//Movimento delle casse
 void Cassa::sposta(int dir)
 {
 	//DOWN = 0, LEFT=1,UP=2, RIGHT=3

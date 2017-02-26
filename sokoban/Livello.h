@@ -12,6 +12,9 @@
 #include"Muro.h" 
 #include"Cassa.h"
 
+#include <iostream>
+using namespace std;
+
 class Livello
 {
 	public:
@@ -32,6 +35,7 @@ class Livello
 		vector<ALLEGRO_BITMAP*> boxes;
 		vector<ALLEGRO_BITMAP*> Cbox;
 		void inizializzaAllegro();
+		int dir;
 		ALLEGRO_DISPLAY* display;
 		ALLEGRO_TIMER* timer;
 		ALLEGRO_EVENT_QUEUE* event_queue;
@@ -41,7 +45,6 @@ class Livello
 		ALLEGRO_BITMAP* Player;
 		ALLEGRO_BITMAP* Wall;
 		ALLEGRO_BITMAP* sfondo;
-		ALLEGRO_BITMAP* Rigioca;
 
 };
 #endif

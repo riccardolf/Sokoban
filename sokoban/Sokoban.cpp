@@ -1,4 +1,3 @@
-#include <iostream>
 #include<allegro5/allegro.h>
 #include<allegro5/allegro_image.h>
 #include<allegro5/allegro_audio.h>
@@ -6,10 +5,10 @@
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
 #include"GestoreGioco.h"
-using namespace std;
 
 int main()
 {
+	// Inizializzazione oggetti di Allegro
 	if (!al_init())
 	{
 		cerr << "no allegro" << endl;
@@ -40,6 +39,7 @@ int main()
 		cerr << "no audio" << endl;
 		return -1;
    	}
+
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
 	if (!display)
 	{
@@ -85,6 +85,7 @@ int main()
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_play_sample_instance(songInstance);
 
+	//Scelta Play o Quit
 	while (x<play_x || x>quit_x+183 || x>play_x+183 && x<quit_x || y>play_y+85 || y<play_y)
 	{
 		ALLEGRO_EVENT ev;
@@ -101,6 +102,7 @@ int main()
 
 	al_destroy_display(display);
 
+	//Creazione livelli
 	if (x >= play_x && x <= play_x + 183 && y >= play_y && y <= play_y + 85)
 	{
 		for(int i=0; i<9; i++)
@@ -117,7 +119,6 @@ int main()
 		if(risp==1)
 		{
 			sokoban.creaLivello(9);
-	//		al_show_native_message_box(al_get_current_display(), "", "", "",0,ALLEGRO_MESSAGEBOX_WARN);
 			sokoban.creaLivello(10);
 		}
 

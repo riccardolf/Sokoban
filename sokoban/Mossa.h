@@ -24,6 +24,7 @@ class Mossa
 				delete[] mappa[i];
 			delete[]mappa;
 		}
+
 		Giocatore getPlayer() const	{return player;}
 		int** getMappa() const {return mappa;}
 

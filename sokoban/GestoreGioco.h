@@ -1,8 +1,6 @@
 #ifndef GESTOREGIOCO_H
 #define GESTOREGIOCO_H
 #include"Livello.h"
-#include<vector>
-using namespace std;
 
 class GestoreGioco
 {
