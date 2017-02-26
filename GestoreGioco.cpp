@@ -326,18 +326,18 @@ bool GestoreGioco::creaLivello(int liv)
 		muri.push_back(new Muro(posMuriX[liv][i], posMuriY[liv][i]));
 
 	Livello L(player, casse, muri);
-	if(!L.gioca())
-		return false;		
+	bool done=L.gioca();
 
 	for(int i=0; i<numMuri[liv]; i++)
 		delete muri[i];
 	for(int i=0; i<numCasse[liv]; i++)
 		delete casse[i];
-	
+
 	casse.clear();
 	muri.clear();
 
-	return true;
+	return done;
+
 }
 
 
