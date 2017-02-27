@@ -1,7 +1,7 @@
 #ifndef GESTOREGIOCO_H
 #define GESTOREGIOCO_H
 #include"Livello.h"
-#include <allegro5\allegro.h>
+#include <allegro5/allegro.h>
 
 class GestoreGioco
 {
