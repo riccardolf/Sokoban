@@ -291,7 +291,7 @@ GestoreGioco::GestoreGioco()
 		posMuriX[9][i] = MuriX10[i];
 	}
 
-	//Livello 11
+	//Livello 11	
 	int CasseXi11[] = { 4,4,4 };
 	int CasseYi11[] = { 4,5,6, };
 	int CasseXf11[] = { 5,5,5 };
@@ -304,7 +304,7 @@ GestoreGioco::GestoreGioco()
 		posCasseYi[10][i] = CasseYi11[i];
 		posCasseYf[10][i] = CasseYf11[i];
 	}
-
+	
 	int MuriX11[] = { 3,4,5,6,6,7,8,8,8,9,9,9,9,9,8,7,6,5,4,3,2,1,1,1,1,1,2,3,3,3,6,6,7,5,3 };
 	int MuriY11[] = { 1,1,1,1,2,2,2,3,4,4,5,6,7,8,8,8,8,8,8,8,8,8,7,6,5,4,4,4,3,2,4,5,6,7,6 };
 
@@ -316,6 +316,129 @@ GestoreGioco::GestoreGioco()
 
 }
 
+GestoreGioco::GestoreGioco(const GestoreGioco& g)
+{
+	numLivelli=g.numLivelli;
+	numCasse = new int[numLivelli + 2];
+	numMuri = new int[numLivelli + 2];
+	posCasseXi = new int*[numLivelli + 2];
+	posCasseXf = new int*[numLivelli + 2];
+	posCasseYi = new int*[numLivelli + 2];
+	posCasseYf = new int*[numLivelli + 2];
+	posMuriX = new int*[numLivelli + 2];
+	posMuriY = new int*[numLivelli + 2];
+	posGiocatoreX = new int[numLivelli + 2];
+	posGiocatoreY = new int[numLivelli + 2];
+	
+	for (int i = 0; i<numLivelli + 2; i++)
+	{
+		posGiocatoreX[i] = g.posGiocatoreX[i];
+		posGiocatoreY[i] = g.posGiocatoreY[i];
+		numCasse[i] = g.numCasse[i];
+		numMuri[i] = g.numMuri[i];
+		posCasseXi[i] = new int[numCasse[i]];
+		posCasseXf[i] = new int[numCasse[i]];
+		posCasseYi[i] = new int[numCasse[i]];
+		posCasseYf[i] = new int[numCasse[i]];
+		posMuriX[i] = new int[numMuri[i]];
+		posMuriY[i] = new int[numMuri[i]];
+	}
+
+	for (int i = 0; i<numLivelli+2; i++)
+		for(int j=0; j<numCasse[i]; j++)	
+		{
+			posMuriX[i][j]=g.posMuriX[i][j];
+			posMuriY[i][j]=g.posMuriY[i][j];
+			posCasseXi[i][j]=g.posCasseXi[i][j];
+			posCasseXf[i][j]=g.posCasseXf[i][j];
+			posCasseYi[i][j]=g.posCasseYi[i][j];
+			posCasseYf[i][j]=g.posCasseYf[i][j];
+		}
+		
+		for(int i=0; i<3; i++)
+		{
+			PG[i]=g.PG[i];
+			boxes[i]=g.boxes[i];
+			Cbox[i]=g.Cbox[i];
+		}
+		
+}
+
+GestoreGioco& GestoreGioco::operator=(const GestoreGioco& g)
+{
+	if(this!=&g)
+	{	
+		numLivelli=g.numLivelli;
+		for (int i = 0; i<numLivelli; i++)
+		{
+			delete[]posMuriX[i];
+			delete[]posMuriY[i];
+			delete[]posCasseXi[i];
+			delete[]posCasseXf[i];
+			delete[]posCasseYi[i];
+			delete[]posCasseYf[i];
+		}
+
+		delete[]posGiocatoreX;
+		delete[]posGiocatoreY;
+		delete[]posMuriX;
+		delete[]posMuriY;
+		delete[]posCasseXi;
+		delete[]posCasseXf;
+		delete[]posCasseYi;
+		delete[]posCasseYf;
+		delete[]numMuri;
+		delete[]numCasse;
+
+		for(int i=0; i<3; i++)
+		{
+			al_destroy_bitmap(PG[i]);
+			al_destroy_bitmap(boxes[i]);
+			al_destroy_bitmap(Cbox[i]);
+		}
+
+		numCasse = new int[numLivelli + 2];
+		numMuri = new int[numLivelli + 2];
+		posCasseXi = new int*[numLivelli + 2];
+		posCasseXf = new int*[numLivelli + 2];
+		posCasseYi = new int*[numLivelli + 2];
+		posCasseYf = new int*[numLivelli + 2];
+		posMuriX = new int*[numLivelli + 2];
+		posMuriY = new int*[numLivelli + 2];
+		posGiocatoreX = new int[numLivelli + 2];
+		posGiocatoreY = new int[numLivelli + 2];
+	
+		for (int i = 0; i<numLivelli + 2; i++)
+		{
+			posGiocatoreX[i] = g.posGiocatoreX[i];
+			posGiocatoreY[i] = g.posGiocatoreY[i];
+			numCasse[i] = g.numCasse[i];
+			numMuri[i] = g.numMuri[i];
+			posCasseXi[i] = new int[numCasse[i]];
+			posCasseXf[i] = new int[numCasse[i]];
+			posCasseYi[i] = new int[numCasse[i]];
+			posCasseYf[i] = new int[numCasse[i]];
+			posMuriX[i] = new int[numMuri[i]];
+			posMuriY[i] = new int[numMuri[i]];
+		}
+
+		for (int i = 0; i<numLivelli+2; i++)
+			for(int j=0; j<numCasse[i]; j++)	
+			{
+				posMuriX[i][j]=g.posMuriX[i][j];
+				posMuriY[i][j]=g.posMuriY[i][j];
+				posCasseXi[i][j]=g.posCasseXi[i][j];
+				posCasseXf[i][j]=g.posCasseXf[i][j];
+				posCasseYi[i][j]=g.posCasseYi[i][j];
+				posCasseYf[i][j]=g.posCasseYf[i][j];
+			}	
+
+		PG=g.PG;
+		boxes=g.boxes;
+		Cbox=g.Cbox;
+	}
+	return *this;
+}
 
 GestoreGioco::~GestoreGioco()
 {
@@ -339,6 +462,17 @@ GestoreGioco::~GestoreGioco()
 	delete[]posCasseYf;
 	delete[]numMuri;
 	delete[]numCasse;
+
+	for(int i=0; i<3; i++)
+	{
+		al_destroy_bitmap(PG[i]);
+		al_destroy_bitmap(boxes[i]);
+		al_destroy_bitmap(Cbox[i]);
+	}
+	
+	/*PG.clear();
+	boxes.clear();
+	Cbox.clear();*/
 }
 
 //Creazione livelli
@@ -346,6 +480,9 @@ bool GestoreGioco::creaLivello(int liv, int indice)
 {
 	if(liv>11)
 		return false;
+	
+	vector<Cassa*> casse;
+	vector<Muro*> muri;
 
 	Giocatore player(posGiocatoreX[liv], posGiocatoreY[liv]); 		//  uso il costruttore di player;
 

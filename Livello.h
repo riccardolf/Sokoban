@@ -19,6 +19,8 @@ class Livello
 {
 	public:
 		Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m, ALLEGRO_BITMAP* PG, ALLEGRO_BITMAP* B, ALLEGRO_BITMAP* C);
+		Livello(const Livello& l);
+		Livello& operator=(const Livello& l);
 		~Livello();
 		bool gioca();
 		void drawMap(int dir) const;
@@ -41,6 +43,7 @@ class Livello
 		ALLEGRO_BITMAP* Player;
 		ALLEGRO_BITMAP* Wall;
 		ALLEGRO_BITMAP* sfondo;
+		ALLEGRO_BITMAP* Superato;
 
 };
 #endif

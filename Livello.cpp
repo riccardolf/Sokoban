@@ -41,6 +41,72 @@ Livello::Livello(const Giocatore& g, vector<Cassa*> c, vector<Muro*> m, ALLEGRO_
 	mosse.push(new Mossa(g, mappa));		// mossa: 0		Come inizia il livello
 }
 
+Livello::Livello(const Livello& l)
+{
+	muri=l.muri;
+	casse=l.casse;
+	Box = l.Box;
+	Player = l.Player;
+	BoxColor = l.BoxColor;
+	
+	mappa=new int*[12];
+	for(int i=0; i<12; i++)
+		mappa[i]=new int [10];
+	
+	for(int i=0; i<12; i++)
+		for(int j=0; j<10; j++)
+			mappa[i][j] = l.mappa[i][j];
+	display=l.display;
+	timer=l.timer;
+	event_queue=l.event_queue;
+	Undo=l.Undo;
+	Box=l.Box;
+	BoxColor=l.BoxColor;
+	Player=l.Player;
+	Wall=l.Wall;
+	sfondo=l.sfondo;
+	Superato=l.Superato;
+}
+
+Livello& Livello::operator=(const Livello& l)
+{
+	if(this!=&l)
+	{
+		muri=l.muri;
+		casse=l.casse;
+		al_destroy_bitmap(Box);		
+		al_destroy_bitmap(Player);
+		al_destroy_bitmap(BoxColor);
+		Box = l.Box;
+		Player = l.Player;
+		BoxColor = l.BoxColor;
+
+		for(int i=0; i<12; i++)
+			delete[] mappa[i];
+		delete[]mappa;
+		
+		destroy();
+		mappa=new int*[12];
+		for(int i=0; i<12; i++)
+			mappa[i]=new int [10];
+
+		for(int i=0; i<12; i++)
+			for(int j=0; j<10; j++)
+				mappa[i][j] = l.mappa[i][j];
+
+		display=l.display;
+		timer=l.timer;
+		event_queue=l.event_queue;
+		Undo=l.Undo;
+		Box=l.Box;
+		BoxColor=l.BoxColor;
+		Player=l.Player;
+		Wall=l.Wall;
+		sfondo=l.sfondo;
+		Superato=l.Superato;
+	}
+	return *this;
+}
 
 Livello::~Livello()
 {
@@ -103,6 +169,7 @@ void Livello::drawMap(int dir) const
 void Livello::destroy()
 {
 	clear(mosse, mosse.size());
+	al_destroy_bitmap(Superato);
 	al_destroy_bitmap(Undo);
 	al_destroy_bitmap(sfondo);
 	al_destroy_bitmap(Wall);
@@ -325,8 +392,12 @@ bool Livello::gioca()
 		{
 			for (int i = 0; i < 4; i++)
 				keys[i] = false;
-
-			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "LIVELLO SUPERATO!", "",0,ALLEGRO_MESSAGEBOX_WARN);
+			
+			al_draw_bitmap(Superato,0,0,0);
+			al_flip_display();
+			al_rest(1.5);
+			al_clear_to_color(al_map_rgb(0,0,0));
+		
 			destroy();
 			return true;
 		}
@@ -388,7 +459,7 @@ void Livello::inizializzaAllegro()
 	}
 	al_set_window_title(display,"Sokoban");
 
-	const float FPS=12;
+	const float FPS=10;
 	timer=al_create_timer(1/FPS);
 	if(!timer)
 	{
@@ -408,4 +479,5 @@ void Livello::inizializzaAllegro()
 	Wall = al_load_bitmap("wall.png");
 	Undo = al_load_bitmap("Indietro.png");
 	sfondo = al_load_bitmap("Background.jpg");	
+	Superato = al_load_bitmap("Superato.jpg");
 }

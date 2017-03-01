@@ -7,6 +7,8 @@ class GestoreGioco
 {
 	public:
 		GestoreGioco();
+		GestoreGioco(const GestoreGioco& g);
+		GestoreGioco& operator=(const GestoreGioco& g);
 		~GestoreGioco();
 		bool creaLivello(int liv, int indice);
 
@@ -15,8 +17,6 @@ class GestoreGioco
 		vector<ALLEGRO_BITMAP*> PG;
 		vector<ALLEGRO_BITMAP*> boxes;
 		vector<ALLEGRO_BITMAP*> Cbox;
-		vector<Cassa*> casse;
-		vector<Muro*> muri;
 		int** posCasseXi;
 		int** posCasseXf;
 		int** posCasseYi;
