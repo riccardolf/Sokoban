@@ -3,9 +3,11 @@
 
 GestoreGioco::GestoreGioco()
 {
+	audio=true;
 	if (!al_init())
 		cerr << "No Allegro" << endl;
-	
+
+
 	//	Caricamento bitmap dei personaggi
 	PG.push_back(al_load_bitmap("George.png"));
 	PG.push_back(al_load_bitmap("Death.png"));
@@ -30,17 +32,17 @@ GestoreGioco::GestoreGioco()
 		if (!Cbox[i])
 			cerr << "No Cbox bitmap" << endl;
 
-	numLivelli = 9;
-	numCasse = new int[numLivelli + 2];
-	numMuri = new int[numLivelli + 2];
-	posCasseXi = new int*[numLivelli + 2];
-	posCasseXf = new int*[numLivelli + 2];
-	posCasseYi = new int*[numLivelli + 2];
-	posCasseYf = new int*[numLivelli + 2];
-	posMuriX = new int*[numLivelli + 2];
-	posMuriY = new int*[numLivelli + 2];
-	posGiocatoreX = new int[numLivelli + 2];
-	posGiocatoreY = new int[numLivelli + 2];
+	numLivelli = 11;
+	numCasse = new int[numLivelli];
+	numMuri = new int[numLivelli];
+	posCasseXi = new int*[numLivelli];
+	posCasseXf = new int*[numLivelli];
+	posCasseYi = new int*[numLivelli];
+	posCasseYf = new int*[numLivelli];
+	posMuriX = new int*[numLivelli];
+	posMuriY = new int*[numLivelli];
+	posGiocatoreX = new int[numLivelli];
+	posGiocatoreY = new int[numLivelli];
 
 			 	 //  1  2  3  4  5  6  7  8  9 10 11
 	int nCasse[] = { 2, 4, 3, 4, 8, 3, 7, 5, 4, 1, 3 };
@@ -48,7 +50,7 @@ GestoreGioco::GestoreGioco()
 	int PGx[] =    { 2, 6, 2, 8, 5, 4, 4, 5, 4, 4, 2 };
 	int PGy[] =    { 3, 5, 8, 3, 8, 7, 3, 3, 7, 5, 7 };
 
-	for (int i = 0; i<numLivelli + 2; i++)
+	for (int i = 0; i<numLivelli; i++)
 	{
 		posGiocatoreX[i] = PGx[i];
 		posGiocatoreY[i] = PGy[i];
@@ -319,6 +321,7 @@ GestoreGioco::GestoreGioco()
 
 GestoreGioco::GestoreGioco(const GestoreGioco& g)
 {
+	audio=g.audio;
 	numLivelli=g.numLivelli;
 	numCasse = new int[numLivelli + 2];
 	numMuri = new int[numLivelli + 2];
@@ -369,6 +372,7 @@ GestoreGioco& GestoreGioco::operator=(const GestoreGioco& g)
 {
 	if(this!=&g)
 	{	
+		audio=g.audio;
 		numLivelli=g.numLivelli;
 		for (int i = 0; i<numLivelli; i++)
 		{
@@ -469,14 +473,13 @@ GestoreGioco::~GestoreGioco()
 		al_destroy_bitmap(PG[i]);
 		al_destroy_bitmap(boxes[i]);
 		al_destroy_bitmap(Cbox[i]);
-	}
-	
+	}	
 }
 
 //Creazione livelli
-bool GestoreGioco::creaLivello(int liv, int indice)
+int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 {
-	if(liv>11)
+	if(liv<0 || liv>11)
 		return false;
 	
 	vector<Cassa*> casse;
@@ -490,13 +493,13 @@ bool GestoreGioco::creaLivello(int liv, int indice)
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Coordinate(posMuriX[liv][i], posMuriY[liv][i]));
 	
-	Livello L(player, casse, muri, PG[indice], boxes[indice], Cbox[indice]);
-	bool done=L.gioca();
+	Livello L(player, casse, muri, PG[indice], boxes[indice], Cbox[indice], mod, audio);
+	int done=L.gioca();
 
 	casse.clear();
 	muri.clear();
 
-	return done;
+	return done;	// 0-8 livelli	 -1 display close
 }
 
 

@@ -10,9 +10,11 @@ class GestoreGioco
 		GestoreGioco(const GestoreGioco& g);
 		GestoreGioco& operator=(const GestoreGioco& g);
 		~GestoreGioco();
-		bool creaLivello(int liv, int indice);
+		int creaLivello(int liv, int indice, bool mod);
+		void setAudio(bool a)	{audio = a;}
 
 	private:
+		bool audio;
 		int numLivelli;
 		vector<ALLEGRO_BITMAP*> PG;
 		vector<ALLEGRO_BITMAP*> boxes;

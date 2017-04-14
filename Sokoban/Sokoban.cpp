@@ -77,7 +77,8 @@ int main(int argc, char **argv)
 
 	GestoreGioco sokoban;
 
-	int play_x = 170, play_y = 360, quit_x = 430, quit_y = 360, x = 0, y = 0;
+	int arcade_x = 170, arcade_y = 360, levels_x = 430, levels_y = 360, x = 0, y = 0,  audio_x=692, audio_y=595, dim=64;;
+	bool audio=true;	
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_draw_bitmap(Sfondo,0,0,0);	
@@ -85,8 +86,8 @@ int main(int argc, char **argv)
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_play_sample_instance(songInstance);
 
-	//Scelta Play o Quit
-	while (x<play_x || x>quit_x+183 || x>play_x+183 && x<quit_x || y>play_y+85 || y<play_y)
+	//Scelta Modalita
+	while (x<arcade_x || x>levels_x+183 || x>arcade_x+183 && x<levels_x || y>arcade_y+85 || y<arcade_y)
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -95,45 +96,115 @@ int main(int argc, char **argv)
 			x = ev.mouse.x;
 			y = ev.mouse.y;
 		}
-		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-			x = quit_x;
-			y = quit_y;
+		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			al_stop_sample_instance(songInstance);
+			al_destroy_sample(song);
+			al_destroy_sample_instance(songInstance);
+			al_destroy_bitmap(Sfondo);
+			al_destroy_event_queue(event_queue);
+			al_destroy_display(display);
+			return 0;
 		}
+
+		if(x >= audio_x && x <= audio_x+dim && y >= audio_y && y <= audio_y+dim)
+		{
+			if(audio)
+				al_stop_sample_instance(songInstance);
+			else
+				al_play_sample_instance(songInstance);
+			audio=!audio;	
+			sokoban.setAudio(audio);
+		}
+
+
 	}	
 
-	if (x >= quit_x && x <= quit_x + 183 && y >= quit_y && y <= quit_y + 85) {
+	// scelta personaggio
+	int PGx[] = { 40,295,580 };
+	int PGy = 310, x1 = 0, y1 = 0, indicePG = 0;
+	ALLEGRO_BITMAP* Select = al_load_bitmap("Select.jpg");
+	al_draw_bitmap(Select, 0, 0, 0);
+	al_flip_display();
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+
+	while (x1 < PGx[0] || x1 > PGx[2] + 100 || (x1 > PGx[0] + 100 && x1<PGx[1]) || (x1 > PGx[1] + 100 && x1<PGx[2]) || y1 < PGy || y1 > PGy + 120)
+	{
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		{
+			x1 = ev.mouse.x;
+			y1 = ev.mouse.y;
+		}
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			al_destroy_bitmap(Select);
+			al_stop_sample_instance(songInstance);
+			al_destroy_sample(song);
+			al_destroy_sample_instance(songInstance);
+			al_destroy_bitmap(Sfondo);
+			al_destroy_event_queue(event_queue);
+			return 0;
+		}
+	}
+	
+	for (unsigned i = 0; i < 3; i++)
+		if (x1 >= PGx[i] && x1 <= PGx[i] + 100 && y1 >= PGy && y1 <= PGy + 120)
+			indicePG = i;
+	
+	al_destroy_bitmap(Select);
+
+	// modalita arcade
+	if (x >= arcade_x && x <= arcade_x + 183 && y >= arcade_y && y <= arcade_y + 85)
+	{
 		al_stop_sample_instance(songInstance);
 		al_destroy_sample(song);
 		al_destroy_sample_instance(songInstance);
 		al_destroy_bitmap(Sfondo);
 		al_destroy_event_queue(event_queue);
-		al_destroy_display(display);
-		return 0;
+		al_destroy_display(display);	
+
+		//Creazione Livelli
+		for(int i=0; i<9; i++)
+			if(sokoban.creaLivello(i,indicePG, false) == -1)
+				return 0;
+
+		int risp= al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "Hai completato il gioco!", "Solo per te un livello bouns difficilissimo. Vuoi giocare? ",0,ALLEGRO_MESSAGEBOX_YES_NO);
+		if(risp==1)
+		{
+			sokoban.creaLivello(9, indicePG, false);
+			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI DI NUOVO", " Passiamo al vero livello", "", 0, ALLEGRO_MESSAGEBOX_WARN);
+			sokoban.creaLivello(10, indicePG, false);
+		}
 	}
 
-	int PGx[] = { 40,295,580 };
-	int PGy = 310;
-	ALLEGRO_BITMAP* Select = al_load_bitmap("Select.jpg");
-	al_draw_bitmap(Select, 0, 0, 0);
-	al_flip_display();
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-	
-	if (x >= play_x && x <= play_x + 183 && y >= play_y && y <= play_y + 85)
+	// modalita seleziona livello
+	else 
 	{
-		int x1=0, y1=0;
-		//Scelta Personaggio
-		while (x1 < PGx[0] || x1 > PGx[2] + 100 || (x1 > PGx[0] + 100 && x1<PGx[1]) || (x1 > PGx[1] + 100 && x1<PGx[2]) || y1 < PGy || y1 > PGy + 120)
+		int liv_x[] = {11,291,572};
+		int liv_y[] = {10,232,453};
+		int x2=0, y2=0, liv=0;
+
+		ALLEGRO_BITMAP* Levels = al_load_bitmap("Levels.jpg");
+		al_draw_bitmap(Levels,0,0,0);
+		al_flip_display();
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+		
+		// scelta livello
+		while (x2<liv_x[0] || x2>liv_x[2]+208 || y2<liv_y[0] || y2>liv_y[2]+197 || x2>liv_x[0]+208 && x2<liv_x[1] || 
+			x2>liv_x[1]+208 && x2<liv_x[2] || y2>liv_y[0]+197 && y2<liv_y[1] || y2>liv_y[1]+197 && y2<liv_y[2])
 		{
 			ALLEGRO_EVENT ev;
 			al_wait_for_event(event_queue, &ev);
 			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 			{
-				x1 = ev.mouse.x;
-				y1 = ev.mouse.y;
+				x2 = ev.mouse.x;
+				y2 = ev.mouse.y;
 			}
 			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			{
-				al_destroy_bitmap(Select);
+				al_destroy_bitmap(Levels);
 				al_stop_sample_instance(songInstance);
 				al_destroy_sample(song);
 				al_destroy_sample_instance(songInstance);
@@ -142,37 +213,25 @@ int main(int argc, char **argv)
 				return 0;
 			}
 		}
-		int indice = 0;
-		for (unsigned i = 0; i < 3; i++)
-			if (x1 >= PGx[i] && x1 <= PGx[i] + 100 && y1 >= PGy && y1 <= PGy + 120)
-				indice = i;
-		al_destroy_bitmap(Select);
-		al_destroy_display(display);
 
-		//Creazione Livelli
-		for(int i=0; i<9; i++)
-			if(!sokoban.creaLivello(i,indice))
-			{
-				al_stop_sample_instance(songInstance);
-				al_destroy_sample(song);
-				al_destroy_sample_instance(songInstance);
-				al_destroy_bitmap(Sfondo);
-				al_destroy_event_queue(event_queue);	
-				return 0;
-			}
-		int risp= al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "Hai completato il gioco!", "Solo per te un livello bouns difficilissimo. Vuoi giocare? ",0,ALLEGRO_MESSAGEBOX_YES_NO);
-		if(risp==1)
+		al_stop_sample_instance(songInstance);
+		al_destroy_sample(song);
+		al_destroy_sample_instance(songInstance);
+		al_destroy_bitmap(Sfondo);
+		al_destroy_event_queue(event_queue);
+		al_destroy_bitmap(Levels);
+		al_destroy_display(display);
+		
+		for(int j = 0; j < 3; j++)
+			for(int i = 0; i < 3; i++)
+				if (x2 >= liv_x[i] && x2 <= liv_x[i] + 215 && y2 >= liv_y[j] && y2 <= liv_y[j] + 215)
+					liv = 3*j+i;
+
+		while(liv >= 0 && liv <= 8)
 		{
-			sokoban.creaLivello(9, indice);
-			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI DI NUOVO", " Passiamo al vero livello", "", 0, ALLEGRO_MESSAGEBOX_WARN);
-			sokoban.creaLivello(10, indice);
+			liv = sokoban.creaLivello(liv,indicePG,true);
 		}
-			
 	}
-	al_stop_sample_instance(songInstance);
-	al_destroy_sample(song);
-	al_destroy_sample_instance(songInstance);
-	al_destroy_bitmap(Sfondo);
-	al_destroy_event_queue(event_queue);
+	
 	return 0;
 }
