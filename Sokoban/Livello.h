@@ -32,7 +32,6 @@ class Livello
 		void destroy();
 
 	private:	
-		bool audio;
 		int** mappa;
 		bool modalita;		// 0 = arcade, 1 = seleziona livelli
 		stack<Mossa*> mosse;
