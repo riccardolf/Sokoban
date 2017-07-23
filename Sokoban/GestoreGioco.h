@@ -1,11 +1,16 @@
 #ifndef GESTOREGIOCO_H
 #define GESTOREGIOCO_H
-#include"Livello.h"
+
 #include <allegro5/allegro.h>
-#include<allegro5/allegro_audio.h>
-#include<allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+
 #include <vector>
+
+#include "Livello.h"
+
 using namespace std;
+
 class GestoreGioco
 {
 	public:
@@ -13,12 +18,11 @@ class GestoreGioco
 		GestoreGioco(const GestoreGioco& g);
 		GestoreGioco& operator=(const GestoreGioco& g);
 		~GestoreGioco();
-		int creaLivello(int liv, int indice, bool mod);
+		int creaLivello(int liv, int indice, bool mod, ALLEGRO_DISPLAY* d);
 		void setAudio();
-		bool getAudio() const	{return audio;}
+		static bool Audio;
 
 	private:
-		bool audio;
 		int numLivelli;
 		ALLEGRO_SAMPLE* song;
 		ALLEGRO_SAMPLE_INSTANCE* songInstance;
@@ -36,6 +40,5 @@ class GestoreGioco
 		int* numCasse;
 		int* numMuri;
 };
-
 
 #endif

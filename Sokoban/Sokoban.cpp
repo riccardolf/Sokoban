@@ -1,8 +1,9 @@
-#include<allegro5/allegro.h>
-#include<allegro5/allegro_image.h>
-#include<allegro5/allegro_native_dialog.h>
-#include<allegro5/allegro_primitives.h>
-#include"GestoreGioco.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_primitives.h>
+
+#include "GestoreGioco.h"
 
 int main(int argc, char **argv)
 {
@@ -33,6 +34,11 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	if(!al_install_keyboard()) {
+		cerr<<"no keyboard"<<endl;
+		return -1;
+	}
+
 	GestoreGioco sokoban;
 
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
@@ -53,16 +59,17 @@ int main(int argc, char **argv)
 
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	ALLEGRO_BITMAP* Sfondo = al_load_bitmap("Background_Init.jpg");
+
 	if (!Sfondo)
 	{
 		cerr << "No Bitmap" << endl;
 		return -1;
 	}
 
-	int arcade_x = 170, arcade_y = 360, levels_x = 430, levels_y = 360, x = 0, y = 0,  audio_x=692, audio_y=595, dim=64;;
-	bool audio=true;	
+	int arcade_x = 170, arcade_y = 360, levels_x = 430, levels_y = 360, x = 0, y = 0, dim=64;;
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_draw_bitmap(Sfondo,0,0,0);	
@@ -73,13 +80,15 @@ int main(int argc, char **argv)
 	while (x<arcade_x || x>levels_x+183 || x>arcade_x+183 && x<levels_x || y>arcade_y+85 || y<arcade_y)
 	{
 		ALLEGRO_EVENT ev;
+		x = y = 0;
 		al_wait_for_event(event_queue, &ev);
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 		{
 			x = ev.mouse.x;
 			y = ev.mouse.y;
 		}
-		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			al_destroy_bitmap(Sfondo);
 			al_destroy_event_queue(event_queue);
@@ -87,12 +96,12 @@ int main(int argc, char **argv)
 			return 0;
 		}
 
-		if(x >= audio_x && x <= audio_x+dim && y >= audio_y && y <= audio_y+dim)
-			sokoban.setAudio();
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+			if(ev.keyboard.keycode == ALLEGRO_KEY_M)
+				sokoban.setAudio();
+	}
 
-	}	
-
-	// scelta personaggio
+	// Scelta Personaggio
 	int PGx[] = { 40,295,580 };
 	int PGy = 310, x1 = 0, y1 = 0, indicePG = 0;
 	ALLEGRO_BITMAP* Select = al_load_bitmap("Select.jpg");
@@ -129,19 +138,20 @@ int main(int argc, char **argv)
 	{
 		al_destroy_bitmap(Sfondo);
 		al_destroy_event_queue(event_queue);
-		al_destroy_display(display);	
 
 		//Creazione Livelli
 		for(int i=0; i<9; i++)
-			if(sokoban.creaLivello(i,indicePG, false) == -1)
+			if(sokoban.creaLivello(i,indicePG, false, display) == -1) {
+				al_destroy_display(display);
 				return 0;
+			}
 
 		int risp= al_show_native_message_box(al_get_current_display(), "COMPLIMENTI", "Hai completato il gioco!", "Solo per te un livello bouns difficilissimo. Vuoi giocare? ",0,ALLEGRO_MESSAGEBOX_YES_NO);
 		if(risp==1)
 		{
-			sokoban.creaLivello(9, indicePG, false);
+			sokoban.creaLivello(9, indicePG, false, display);
 			al_show_native_message_box(al_get_current_display(), "COMPLIMENTI DI NUOVO", " Passiamo al vero livello", "", 0, ALLEGRO_MESSAGEBOX_WARN);
-			sokoban.creaLivello(10, indicePG, false);
+			sokoban.creaLivello(10, indicePG, false, display);
 		}
 	}
 
@@ -173,6 +183,7 @@ int main(int argc, char **argv)
 				al_destroy_bitmap(Levels);
 				al_destroy_bitmap(Sfondo);
 				al_destroy_event_queue(event_queue);
+				al_destroy_display(display);
 				return 0;
 			}
 		}
@@ -180,7 +191,6 @@ int main(int argc, char **argv)
 		al_destroy_bitmap(Sfondo);
 		al_destroy_event_queue(event_queue);
 		al_destroy_bitmap(Levels);
-		al_destroy_display(display);
 		
 		for(int j = 0; j < 3; j++)
 			for(int i = 0; i < 3; i++)
@@ -189,9 +199,11 @@ int main(int argc, char **argv)
 
 		while(liv >= 0 && liv <= 8)
 		{
-			liv = sokoban.creaLivello(liv,indicePG,true);
+			liv = sokoban.creaLivello(liv,indicePG,true, display);
 		}
 	}
-	
+
+	al_destroy_display(display);
+
 	return 0;
 }

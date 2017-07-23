@@ -1,9 +1,10 @@
 #include"GestoreGioco.h"
 
+bool GestoreGioco::Audio = true;
+
+
 GestoreGioco::GestoreGioco()
 {
-	audio = true;
-	
 	if (!al_init())
 		cerr << "No Allegro" << endl;
 
@@ -13,6 +14,7 @@ GestoreGioco::GestoreGioco()
 	al_reserve_samples(10);
 	song = al_load_sample("Song.ogg");
 	songInstance = al_create_sample_instance(song);
+
 	al_play_sample_instance(songInstance);
 
 	if(!song || !songInstance)
@@ -491,7 +493,7 @@ GestoreGioco::~GestoreGioco()
 }
 
 //Creazione livelli
-int GestoreGioco::creaLivello(int liv, int indice, bool mod)
+int GestoreGioco::creaLivello(int liv, int indice, bool mod, ALLEGRO_DISPLAY* display)
 {
 	if(liv<0 || liv>11)
 		return false;
@@ -499,7 +501,7 @@ int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 	vector<Cassa*> casse;
 	vector<Coordinate*> muri;
 
-	Coordinate player(posGiocatoreX[liv], posGiocatoreY[liv]); 		
+	Coordinate player(posGiocatoreX[liv], posGiocatoreY[liv]);
 
 	for (int i = 0; i<numCasse[liv]; i++)
 		casse.push_back(new Cassa(posCasseXi[liv][i], posCasseYi[liv][i], posCasseXf[liv][i], posCasseYf[liv][i]));
@@ -507,8 +509,9 @@ int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Coordinate(posMuriX[liv][i], posMuriY[liv][i]));
 	
-	Livello L(*this, player, casse, muri, PG[indice], boxes[indice], Cbox[indice], mod);
-	int done=L.gioca();
+	Livello L(player, casse, muri, PG[indice], boxes[indice], Cbox[indice], display, songInstance, mod);
+
+	int done = L.gioca();
 
 	casse.clear();
 	muri.clear();
@@ -516,12 +519,12 @@ int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 	return done;	// 0-8 livelli	 -1 display close
 }
 
-void GestoreGioco::setAudio()
+void GestoreGioco::setAudio() 
 {
-	audio = !audio;
+	GestoreGioco::Audio = !GestoreGioco::Audio;
 
-	if (audio)	// riattiva volume
-		al_play_sample_instance(songInstance);
-	else 		// muto
-		al_stop_sample_instance(songInstance);
+	if (GestoreGioco::Audio)  // riattiva volume 
+    	al_play_sample_instance(songInstance); 
+ 	else     // muto 
+    	al_stop_sample_instance(songInstance); 
 }
