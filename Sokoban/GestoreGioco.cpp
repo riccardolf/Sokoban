@@ -30,7 +30,7 @@ GestoreGioco::GestoreGioco()
 	PG.push_back(al_load_bitmap("Walter.png"));
 	for (unsigned i = 0; i<PG.size(); i++)
 		if (!PG[i])
-			cerr << "No PG bitmap" << endl;
+			cerr << "No PG bitmap " << endl;
 
 	//	Caricamento bitmap delle casse
 	boxes.push_back(al_load_bitmap("box.png"));
@@ -61,10 +61,10 @@ GestoreGioco::GestoreGioco()
 	posGiocatoreY = new int[numLivelli];
 
 			 	 //  1  2  3  4  5  6  7  8  9 10 11
-	int nCasse[] = { 2, 4, 3, 4, 8, 3, 7, 5, 4, 1, 3 };
-	int nMuri[] =  {23,28,39,37,48,36,35,26,29,12,35 };
-	int PGx[] =    { 2, 6, 2, 8, 5, 4, 4, 5, 4, 4, 2 };
-	int PGy[] =    { 3, 5, 8, 3, 8, 7, 3, 3, 7, 5, 7 };
+	int nCasse[] = { 2, 4, 3, 4, 3, 3, 7, 5, 4, 1, 3 };
+	int nMuri[] =  {23,28,39,37,39,36,35,26,29,12,35 };
+	int PGx[] =    { 2, 6, 2, 8, 1, 4, 4, 5, 4, 4, 2 };
+	int PGy[] =    { 3, 5, 8, 3, 5, 7, 3, 3, 7, 5, 7 };
 
 	for (int i = 0; i<numLivelli; i++)
 	{
@@ -172,10 +172,10 @@ GestoreGioco::GestoreGioco()
 	}
 
 	//Livello 5
-	int CasseXi5[] = { 2,9,3,4,5,6,7,8 };
-	int CasseYi5[] = { 2,2,7,7,7,7,7,7 };
-	int CasseXf5[] = { 2,4,5,6,7,9,1,10};
-	int CasseYf5[] = { 1,1,1,1,1,1,4,4 };
+	int CasseXi5[] = {4,6,8};
+	int CasseYi5[] = {5,5,5};
+	int CasseXf5[] = {7,7,7};
+	int CasseYf5[] = {2,3,4};
 
 	for (int i = 0; i<numCasse[4]; i++)
 	{
@@ -185,8 +185,8 @@ GestoreGioco::GestoreGioco()
 		posCasseYf[4][i] = CasseYf5[i];
 	}
 
-	int MuriX5[] = {1,2,3,4,5,6,7,8,9,10,10,10,10,11,11,11,11,10,10,10,10,9,8,7,6,5,4,3,2,1,1,1,1,0,0,0,0,1,1,1,3,4,7,8,4,5,6,7 };
-	int MuriY5[] = {0,0,0,0,0,0,0,0,0, 0, 1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9,9,9,9,9,9,9,9,9,9,8,7,6,6,5,4,3,3,2,1,2,2,2,2,4,5,5,4 };
+	int MuriX5[] = {0,1,2,3,4,5,6,6,6,6,7,8,9,10,10,10,10,10,10,9,8,8,8,7,6,5,4,3,2,1,0,0,0,0,2,4,6,8,8};
+	int MuriY5[] = {4,4,4,4,4,4,4,3,2,1,1,1,1, 1, 2, 3, 4, 5, 6,6,6,7,8,8,8,8,8,8,8,8,8,7,6,5,6,6,6,3,4};
 
 	for (int i = 0; i<numMuri[4]; i++)
 	{

@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	ALLEGRO_BITMAP* Sfondo = al_load_bitmap("Background_Init.jpg");
+	ALLEGRO_BITMAP* Sfondo = al_load_bitmap("scelta.jpg");
 
 	if (!Sfondo)
 	{
