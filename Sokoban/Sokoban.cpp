@@ -1,7 +1,5 @@
 #include<allegro5/allegro.h>
 #include<allegro5/allegro_image.h>
-#include<allegro5/allegro_audio.h>
-#include<allegro5/allegro_acodec.h>
 #include<allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_primitives.h>
 #include"GestoreGioco.h"
@@ -34,11 +32,8 @@ int main(int argc, char **argv)
 		cerr << "no mouse" << endl;
 		return -1;
 	}
-	if(!al_install_audio() || !al_init_acodec_addon())
-	{
-		cerr << "no audio" << endl;
-		return -1;
-   	}
+
+	GestoreGioco sokoban;
 
 	ALLEGRO_DISPLAY* display = al_create_display(800, 700);
 	if (!display)
@@ -48,12 +43,14 @@ int main(int argc, char **argv)
 	}
 	al_set_window_title(display,"Sokoban");
 
+
 	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
 	if (!event_queue)
 	{
 		cerr << "no event_queue" << endl;
 		return -1;
 	}
+
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
@@ -64,19 +61,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	al_reserve_samples(10);
-	ALLEGRO_SAMPLE* song = al_load_sample("Song.ogg");
-	ALLEGRO_SAMPLE_INSTANCE* songInstance = al_create_sample_instance(song);
-	if(!song || !songInstance)
-	{	
-		cerr<<"no song"<<endl;
-		return -1;
-	}
-	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
-	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
-
-	GestoreGioco sokoban;
-
 	int arcade_x = 170, arcade_y = 360, levels_x = 430, levels_y = 360, x = 0, y = 0,  audio_x=692, audio_y=595, dim=64;;
 	bool audio=true;	
 
@@ -84,7 +68,6 @@ int main(int argc, char **argv)
 	al_draw_bitmap(Sfondo,0,0,0);	
 	al_flip_display();
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	al_play_sample_instance(songInstance);
 
 	//Scelta Modalita
 	while (x<arcade_x || x>levels_x+183 || x>arcade_x+183 && x<levels_x || y>arcade_y+85 || y<arcade_y)
@@ -98,9 +81,6 @@ int main(int argc, char **argv)
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
-			al_stop_sample_instance(songInstance);
-			al_destroy_sample(song);
-			al_destroy_sample_instance(songInstance);
 			al_destroy_bitmap(Sfondo);
 			al_destroy_event_queue(event_queue);
 			al_destroy_display(display);
@@ -108,15 +88,7 @@ int main(int argc, char **argv)
 		}
 
 		if(x >= audio_x && x <= audio_x+dim && y >= audio_y && y <= audio_y+dim)
-		{
-			if(audio)
-				al_stop_sample_instance(songInstance);
-			else
-				al_play_sample_instance(songInstance);
-			audio=!audio;	
-			sokoban.setAudio(audio);
-		}
-
+			sokoban.setAudio();
 
 	}	
 
@@ -140,9 +112,6 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			al_destroy_bitmap(Select);
-			al_stop_sample_instance(songInstance);
-			al_destroy_sample(song);
-			al_destroy_sample_instance(songInstance);
 			al_destroy_bitmap(Sfondo);
 			al_destroy_event_queue(event_queue);
 			return 0;
@@ -158,9 +127,6 @@ int main(int argc, char **argv)
 	// modalita arcade
 	if (x >= arcade_x && x <= arcade_x + 183 && y >= arcade_y && y <= arcade_y + 85)
 	{
-		al_stop_sample_instance(songInstance);
-		al_destroy_sample(song);
-		al_destroy_sample_instance(songInstance);
 		al_destroy_bitmap(Sfondo);
 		al_destroy_event_queue(event_queue);
 		al_destroy_display(display);	
@@ -205,18 +171,12 @@ int main(int argc, char **argv)
 			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			{
 				al_destroy_bitmap(Levels);
-				al_stop_sample_instance(songInstance);
-				al_destroy_sample(song);
-				al_destroy_sample_instance(songInstance);
 				al_destroy_bitmap(Sfondo);
 				al_destroy_event_queue(event_queue);
 				return 0;
 			}
 		}
 
-		al_stop_sample_instance(songInstance);
-		al_destroy_sample(song);
-		al_destroy_sample_instance(songInstance);
 		al_destroy_bitmap(Sfondo);
 		al_destroy_event_queue(event_queue);
 		al_destroy_bitmap(Levels);

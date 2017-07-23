@@ -1,11 +1,11 @@
 #include"Livello.h"
 
-Livello::Livello(const Coordinate& g, vector<Cassa*> c, vector<Coordinate*> m, ALLEGRO_BITMAP* PG, ALLEGRO_BITMAP* B, ALLEGRO_BITMAP* C, bool mod, bool a)
+Livello::Livello(const GestoreGioco& gg,const Coordinate& g, vector<Cassa*> c, vector<Coordinate*> m, ALLEGRO_BITMAP* PG, ALLEGRO_BITMAP* B, ALLEGRO_BITMAP* C, bool mod)
 {
 	this->inizializzaAllegro();
 	
+	game = gg;
 	// Si inizializza il livello	
-	audio=a;
 	player=g;
 	modalita=mod;
 	muri=m;
@@ -45,7 +45,6 @@ Livello::Livello(const Coordinate& g, vector<Cassa*> c, vector<Coordinate*> m, A
 
 Livello::Livello(const Livello& l)
 {
-	audio=l.audio;
 	modalita=l.modalita;
 	player=l.player;
 	muri=l.muri;
@@ -78,7 +77,6 @@ Livello& Livello::operator=(const Livello& l)
 {
 	if(this!=&l)
 	{
-		audio=l.audio;
 		modalita=l.modalita;
 		player=l.player;
 		muri=l.muri;
@@ -141,8 +139,6 @@ void Livello::destroy()
 	al_destroy_bitmap(Wall);
 	al_destroy_timer(timer);
 	al_destroy_font(font);
-	al_destroy_sample(song);
-	al_destroy_sample_instance(songInstance);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);
 }
@@ -212,9 +208,6 @@ int Livello::gioca()
 	int x = 0, y = 0, dir = 0, cont = 0;
 	
 	// start music
-	if(audio)
-		al_play_sample_instance(songInstance);
-
 	bool draw=false;
 	drawMap(dir);
 	
@@ -242,31 +235,31 @@ int Livello::gioca()
 		{
 			switch (events.keyboard.keycode)
 			{
-			case ALLEGRO_KEY_UP:
-				keys[UP] = true;
-				break;
-			case ALLEGRO_KEY_DOWN:
-				keys[DOWN] = true;
-				break;
-			case ALLEGRO_KEY_LEFT:
-				keys[LEFT] = true;
-				break;
-			case ALLEGRO_KEY_RIGHT:
-				keys[RIGHT] = true;
-				break;
-			case ALLEGRO_KEY_BACKSPACE:
-				keys[BACKSPACE] = true;
-				break;
-			case ALLEGRO_KEY_R:
-				keys[R] = true;
-				break;
-			case ALLEGRO_KEY_M:
-				keys[M] = true;
-				break;
-			case ALLEGRO_KEY_ALTGR:
-				if(modalita)
-					keys[ALTGR] = true;
-				break;
+				case ALLEGRO_KEY_UP:
+								keys[UP] = true;
+								break;
+				case ALLEGRO_KEY_DOWN:
+								keys[DOWN] = true;
+								break;
+				case ALLEGRO_KEY_LEFT:
+								keys[LEFT] = true;
+								break;
+				case ALLEGRO_KEY_RIGHT:
+								keys[RIGHT] = true;
+								break;
+				case ALLEGRO_KEY_BACKSPACE:
+								keys[BACKSPACE] = true;
+								break;
+				case ALLEGRO_KEY_R:
+								keys[R] = true;
+								break;
+				case ALLEGRO_KEY_M:
+								keys[M] = true;
+								break;
+				case ALLEGRO_KEY_ALTGR:
+								if(modalita)
+									keys[ALTGR] = true;
+								break;
 			}
 		
 		 	if (keys[DOWN])
@@ -395,15 +388,9 @@ int Livello::gioca()
 
 				drawMap(0);
 			}
-			else if (keys[M] && audio)	// mute
+			else if (keys[M])	// disattiva/attiva volume
 			{
-				audio = false;
-				al_play_sample_instance(songInstance);
-			}				
-			else if (keys[M] && !audio)	// riattiva volume
-			{
-				audio = true;
-				al_stop_sample_instance(songInstance);
+				GestoreGioco::setAudio();
 			}				
 			else if (keys[ALTGR] && modalita)	// torna a seleziona livelli
 			{
@@ -414,31 +401,31 @@ int Livello::gioca()
 		{
 			switch (events.keyboard.keycode)
 			{
-			case ALLEGRO_KEY_UP:
-				keys[UP] = false;
-				break;
-			case ALLEGRO_KEY_DOWN:
-				keys[DOWN] = false;
-				break;
-			case ALLEGRO_KEY_LEFT:
-				keys[LEFT] = false;
-				break;
-			case ALLEGRO_KEY_RIGHT:
-				keys[RIGHT] = false;
-				break;
-			case ALLEGRO_KEY_BACKSPACE:
-				keys[BACKSPACE] = false;
-				break;
-			case ALLEGRO_KEY_R:
-				keys[R] = false;
-				break;
-			case ALLEGRO_KEY_M:
-				keys[M] = false;
-				break;
-			case ALLEGRO_KEY_ALTGR:
-				if(modalita)
-					keys[ALTGR] = false;
-				break;
+				case ALLEGRO_KEY_UP:
+								keys[UP] = false;
+								break;
+				case ALLEGRO_KEY_DOWN:
+								keys[DOWN] = false;
+								break;
+				case ALLEGRO_KEY_LEFT:
+								keys[LEFT] = false;
+								break;
+				case ALLEGRO_KEY_RIGHT:
+								keys[RIGHT] = false;
+								break;
+				case ALLEGRO_KEY_BACKSPACE:
+								keys[BACKSPACE] = false;
+								break;
+				case ALLEGRO_KEY_R:
+								keys[R] = false;
+								break;
+				case ALLEGRO_KEY_M:
+								keys[M] = false;
+								break;
+				case ALLEGRO_KEY_ALTGR:
+								if(modalita)
+									keys[ALTGR] = false;
+								break;
 			}
 		}
 
@@ -470,18 +457,13 @@ int Livello::gioca()
 				// audio
 			else if(a >= audio_x && a <= audio_x+dim && b >= 0 && b <= dim)
 			{
-				if (audio)	// mute
-				{
-					audio = false;				
-					al_play_sample_instance(songInstance);
-					al_draw_bitmap(Muto, audio_x, 0, 0);
-					al_flip_display();
-				}				
-				else 		// riattiva volume
-				{
-					audio = true;
-					al_stop_sample_instance(songInstance);
-					al_draw_bitmap(Audio, audio_x, 0, 0);
+					game.setAudio();
+
+					if(game.getAudio())
+						al_draw_bitmap(Audio, audio_x, 0, 0);
+					else
+						al_draw_bitmap(Muto, audio_x, 0, 0);
+					
 					al_flip_display();
 				}				
 			}
@@ -490,17 +472,16 @@ int Livello::gioca()
 			{
 				return selezionaNuovoLivello();	
 			}
-		}
 
-		if (events.type == ALLEGRO_EVENT_TIMER && draw && al_is_event_queue_empty(event_queue))
-		{
-		//Inserimento ultima mossa fatta
-			mosse.push(new Mossa(player, mappa, dir));
-			
-		//Disegno della mappa
-			draw=false;
-			drawMap(dir);
-		}
+			if (events.type == ALLEGRO_EVENT_TIMER && draw && al_is_event_queue_empty(event_queue))
+			{
+			//Inserimento ultima mossa fatta
+				mosse.push(new Mossa(player, mappa, dir));
+		
+			//Disegno della mappa
+				draw=false;
+				drawMap(dir);
+			}
 
 		//Controllo fine livello
 		if(Done())
@@ -520,7 +501,6 @@ int Livello::gioca()
 		
 			// modalita seleziona livello			
 			return selezionaNuovoLivello();
-				
 		}
 	}
 }
@@ -624,11 +604,10 @@ void Livello::inizializzaAllegro()
 	if(!al_init_native_dialog_addon())
 	  cerr<<"failed initialisation dialog addon"<<endl;
 
-	if(!al_init_font_addon() || !al_init_ttf_addon())
-	  cerr<<"failed initialisation font addon"<<endl;
+	al_init_font_addon();
 
-	if(!al_install_audio() || !al_init_acodec_addon())
-		cerr << "no audio" << endl;
+	if(!al_init_ttf_addon())
+	  cerr<<"failed initialisation font addon"<<endl;
 
 	if(!al_install_keyboard())
 		cerr<<"no keyboard"<<endl;
@@ -668,14 +647,4 @@ void Livello::inizializzaAllegro()
 	Torna = al_load_bitmap("SelezioneLivelli.png");
 	sfondo = al_load_bitmap("Background.jpg");	
 	Superato = al_load_bitmap("Superato.jpg");
-
-	al_reserve_samples(10);
-	song = al_load_sample("Song.ogg");
-	songInstance = al_create_sample_instance(song);
-	if(!song || !songInstance)
-		cerr<<"no song"<<endl;
-
-	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
-	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
-
 }

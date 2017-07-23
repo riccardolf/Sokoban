@@ -1,13 +1,27 @@
-
 #include"GestoreGioco.h"
 
 GestoreGioco::GestoreGioco()
 {
-	audio=true;
+	audio = true;
+	
 	if (!al_init())
 		cerr << "No Allegro" << endl;
 
+	if(!al_install_audio() || !al_init_acodec_addon())
+		cerr << "no audio" << endl;
 
+	al_reserve_samples(10);
+	song = al_load_sample("Song.ogg");
+	songInstance = al_create_sample_instance(song);
+	al_play_sample_instance(songInstance);
+
+	if(!song || !songInstance)
+		cerr<<"no song"<<endl;
+
+	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
+
+	
 	//	Caricamento bitmap dei personaggi
 	PG.push_back(al_load_bitmap("George.png"));
 	PG.push_back(al_load_bitmap("Death.png"));
@@ -316,12 +330,10 @@ GestoreGioco::GestoreGioco()
 		posMuriY[10][i] = MuriY11[i];
 		posMuriX[10][i] = MuriX11[i];
 	}
-
 }
 
 GestoreGioco::GestoreGioco(const GestoreGioco& g)
 {
-	audio=g.audio;
 	numLivelli=g.numLivelli;
 	numCasse = new int[numLivelli + 2];
 	numMuri = new int[numLivelli + 2];
@@ -372,7 +384,6 @@ GestoreGioco& GestoreGioco::operator=(const GestoreGioco& g)
 {
 	if(this!=&g)
 	{	
-		audio=g.audio;
 		numLivelli=g.numLivelli;
 		for (int i = 0; i<numLivelli; i++)
 		{
@@ -474,6 +485,9 @@ GestoreGioco::~GestoreGioco()
 		al_destroy_bitmap(boxes[i]);
 		al_destroy_bitmap(Cbox[i]);
 	}	
+
+	al_destroy_sample(song);
+	al_destroy_sample_instance(songInstance);
 }
 
 //Creazione livelli
@@ -493,7 +507,7 @@ int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 	for (int i = 0; i<numMuri[liv]; i++)
 		muri.push_back(new Coordinate(posMuriX[liv][i], posMuriY[liv][i]));
 	
-	Livello L(player, casse, muri, PG[indice], boxes[indice], Cbox[indice], mod, audio);
+	Livello L(*this, player, casse, muri, PG[indice], boxes[indice], Cbox[indice], mod);
 	int done=L.gioca();
 
 	casse.clear();
@@ -502,4 +516,12 @@ int GestoreGioco::creaLivello(int liv, int indice, bool mod)
 	return done;	// 0-8 livelli	 -1 display close
 }
 
+void GestoreGioco::setAudio()
+{
+	audio = !audio;
 
+	if (audio)	// riattiva volume
+		al_play_sample_instance(songInstance);
+	else 		// muto
+		al_stop_sample_instance(songInstance);
+}
